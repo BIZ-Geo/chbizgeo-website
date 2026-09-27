@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BIZ Geo – Sprachregion wählen / Choisir la région / Scegli la regione</title>
+<link rel="icon" type="image/png" sizes="256x256" href="de/assets/favicon.png">
+<link rel="alternate" hreflang="de" href="https://biz-geo.github.io/chbizgeo-website/de/index.html">
+<link rel="alternate" hreflang="fr" href="https://biz-geo.github.io/chbizgeo-website/fr/index.html">
+<link rel="alternate" hreflang="it" href="https://biz-geo.github.io/chbizgeo-website/it/index.html">
+<link rel="alternate" hreflang="x-default" href="https://biz-geo.github.io/chbizgeo-website/de/index.html">
+<style>
+  :root{--navy:#16202B;--navy2:#2A3A4F;--greige:#DCD9D2;--font:"Segoe UI","Selawik",-apple-system,BlinkMacSystemFont,Roboto,Arial,sans-serif;}
+  *{box-sizing:border-box;}
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--navy);color:#fff;font-family:var(--font);padding:2rem;}
+  .box{width:min(760px,100%);text-align:center;}
+  .logo{width:76px;height:76px;margin:0 auto 1.5rem;display:block;}
+  h1{font-size:clamp(1.5rem,3vw,2.2rem);margin:0 0 .4rem;letter-spacing:-.01em;}
+  p.sub{color:var(--greige);opacity:.85;margin:0 0 2.25rem;}
+  .regions{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+  @media(max-width:620px){.regions{grid-template-columns:1fr;}}
+  .region{display:flex;flex-direction:column;gap:.35rem;padding:1.6rem 1.25rem;border-radius:6px;
+    background:var(--navy2);color:#fff;text-decoration:none;transition:transform .16s ease,background .16s ease;position:relative;}
+  .region:hover{transform:translateY(-4px);background:#33475f;}
+  .region b{font-size:1.15rem;}
+  .region span{font-size:.9rem;color:var(--greige);opacity:.85;}
+  footer{margin-top:2.5rem;font-size:.8rem;color:var(--greige);opacity:.6;}
+</style>
+</head>
+<body>
+  <div class="box">
+    <img class="logo" src="de/assets/logo-bizgeo.png" alt="BIZ Geo">
+    <h1>Willkommen · Bienvenue · Benvenuti</h1>
+    <p class="sub">Bitte wählen Sie Ihre Sprachregion. · Veuillez choisir votre région. · Scegli la tua regione.</p>
+    <div class="regions">
+      <a class="region" href="de/index.html" data-code="de"><b>Deutschschweiz</b><span>Deutsch</span></a>
+      <a class="region" href="fr/index.html" data-code="fr"><b>Romandie</b><span>Français</span></a>
+      <a class="region" href="it/index.html" data-code="it"><b>Ticino</b><span>Italiano</span></a>
+    </div>
+    <footer>BIZ Geo – Bildungszentrum Geomatik Schweiz</footer>
+  </div>
+<script>
+(function(){
+  function getCookie(n){var m=document.cookie.match('(?:^|; )'+n+'=([^;]*)');return m?m[1]:null;}
+  var valid={de:1,fr:1,it:1};
+  // Wiederkehrer mit gemerkter Region direkt weiterleiten
+  var saved=getCookie('bizgeo_region');
+  if(saved&&valid[saved]){ location.replace(saved+'/index.html'); return; }
+  // Wahl merken (Cookie) beim Klick
+  document.querySelectorAll('.region').forEach(function(a){
+    a.addEventListener('click',function(){
+      document.cookie='bizgeo_region='+a.dataset.code+'; max-age=31536000; path=/';
+    });
+  });
+})();
+</script>
+</body>
+</html>
