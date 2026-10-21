@@ -38,10 +38,10 @@ def translate(html, region):
         html = pat_text.sub(lambda m, v=val: '>' + v + '<', html)
         html = pat_attr.sub(lambda m, v=val: m.group(1) + '="' + v + '"', html)
     return html
-# Ausgabe in den Temp-Bereich (volle Schreib-/Löschrechte; der outputs-Mount
-# blockiert das Löschen). Der Ordner wird danach als ZIP verpackt.
+# Ausgabe nach _source/_site/ (von build.sh gesetzt; wird vor jedem Build geleert und von der
+# GitHub Action als Pages-Artefakt veröffentlicht)
 import os as _os
-SITE = pathlib.Path(_os.environ.get("BIZGEO_SITE", "/tmp/bizgeo_site"))
+SITE = pathlib.Path(_os.environ.get("BIZGEO_SITE", ROOT / "_site"))
 BASE = "https://biz-geo.github.io/chbizgeo-website"            # Livegang: -> https://biz-geo.ch
 
 REGIONS = [("de", "Deutschschweiz", "Deutsch"),

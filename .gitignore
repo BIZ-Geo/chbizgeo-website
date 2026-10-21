@@ -8,3 +8,6 @@ Neue Logos/
 # iCloud-Konfliktkopien (z. B. "index 2.html", "assets 2/")
 * [0-9].*
 * [0-9]/
+
+# Build-Ausgabe (lokale Vorschau; live baut die GitHub Action)
+_source/_site/

@@ -1,6 +1,7 @@
 name: Website bauen und veröffentlichen
 
-# Baut die Site aus _source/ (inkl. CSV-Daten) und veröffentlicht sie auf GitHub Pages.
+# Baut die Site frisch aus _source/ (inkl. CSV-Daten) nach _source/_site/ und veröffentlicht
+# diesen Ordner auf GitHub Pages – im Repo liegt kein Build-Output.
 # Täglich neu, damit vergangene Termine verschwinden; ausserdem bei Änderungen an _source/.
 # Voraussetzung: Settings → Pages → Source = "GitHub Actions".
 on:
@@ -39,14 +40,9 @@ jobs:
           cd _source
           ./build.sh
 
-      - name: Veröffentlichte Teile zusammenstellen
-        run: |
-          mkdir _site
-          cp -r index.html de fr it _site/
-
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: _site
+          path: _source/_site
 
   deploy:
     needs: build
