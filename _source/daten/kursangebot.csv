@@ -1,0 +1,59 @@
+﻿fachgebiet;kurs_de;kurs_fr;kurs_it
+geomatik;Alpine Fernerkundung;Télédétection alpine;Telerilevamento alpino
+geomatik;Amtliche Vermessung;Mensuration officielle;Misurazione ufficiale
+geomatik;Baugrund / Geologie;Sol de fondation / géologie;Sottosuolo / geologia
+geomatik;Digitale Photogrammetrie;Photogrammétrie numérique;Fotogrammetria digitale
+geomatik;Fehlertheorie;Théorie des erreurs;Teoria degli errori
+geomatik;Fixpunktnetze;Réseaux de points fixes;Reti di punti fissi
+geomatik;Fixpunktnetze mit rmDATA;Réseaux de points fixes avec rmDATA;Reti di punti fissi con rmDATA
+geomatik;Geodatenmodell der amtlichen Vermessung DMAV;Modèle de géodonnées de la mensuration officielle MD.MO;Modello di geodati della misurazione ufficiale MD.MU
+geomatik;Grundbuchrechte / Rechte;Droits du registre foncier / droits;Diritti del registro fondiario / diritti
+geomatik;Hydrologie und Wasserbau;Hydrologie et ouvrages hydrauliques;Idrologia e opere idrauliche
+geomatik;Ingenieurvermessung;Génie topographique;Topografia ingegneristica
+geomatik;IoT und Sensorik mit RaspberryPi;IoT et capteurs avec Raspberry Pi;IoT e sensoristica con Raspberry Pi
+geomatik;Klimawandel sichtbar machen;Rendre visible le changement climatique;Rendere visibile il cambiamento climatico
+geomatik;Messtechnik;Techniques de mesure;Tecniche di misura
+geomatik;Mobilität & Infrastruktur;Mobilité & infrastructures;Mobilità & infrastrutture
+geomatik;ÖREB & DMAV;RDPPF & MD.MO;RDPP & MD.MU
+geomatik;Raumplanung;Aménagement du territoire;Pianificazione del territorio
+geomatik;Technisches Rechnen;Calcul technique;Calcolo tecnico
+geomatik;Umwelttechnik;Technique environnementale;Tecnica ambientale
+geomatik;Werkleitungskataster;Cadastre des conduites;Catasto delle condotte
+gis;Datenbank;Base de données;Banca dati
+gis;Datenbankverarbeitung FME;Traitement de bases de données FME;Elaborazione di banche dati FME
+gis;GIS Betriebsorganisation;Organisation de l'exploitation SIG;Organizzazione operativa GIS
+gis;GIS Kompetenz;Compétences SIG;Competenze GIS
+gis;GIS Werkstatt;Atelier SIG;Laboratorio GIS
+gis;Interlis;Interlis;Interlis
+gis;QGIS Vertiefung und OGD;QGIS approfondissement et OGD;QGIS approfondimento e OGD
+gis;Netzinformationssysteme;Systèmes d'information de réseaux;Sistemi informativi di rete
+gis;Python – Geodatenverarbeitung;Python – traitement de géodonnées;Python – elaborazione di geodati
+3d;Additive Fertigung;Fabrication additive;Fabbricazione additiva
+3d;Bauvermessung und BIM;Mensuration de chantier et BIM;Misurazione di cantiere e BIM
+3d;BIM-Datenmanagement;Gestion des données BIM;Gestione dei dati BIM
+3d;BIM Einführung in die BIM-Methode und Labor;BIM : introduction à la méthode BIM et laboratoire;BIM: introduzione al metodo BIM e laboratorio
+3d;BIM und COBie Grundlagen und Technologien;BIM et COBie : bases et technologies;BIM e COBie: basi e tecnologie
+3d;rmDATA 3DWorx to BIM;rmDATA 3DWorx to BIM;rmDATA 3DWorx to BIM
+3d;Mobile Mapping mit SLAM-Technologie;Mobile mapping avec la technologie SLAM;Mobile mapping con tecnologia SLAM
+3d;3D-Geodatenerfassung;Acquisition de géodonnées 3D;Acquisizione di geodati 3D
+3d;3D-Geodatenverwaltung;Gestion de géodonnées 3D;Gestione di geodati 3D
+3d;3D-Objekte aus Bilddaten digital rekonstruieren;Reconstruire numériquement des objets 3D à partir d'images;Ricostruire digitalmente oggetti 3D da immagini
+projekt;Arbeitstechnik;Techniques de travail;Tecniche di lavoro
+projekt;Berufsbildnerkurs;Cours de formateur en entreprise;Corso per formatori in azienda
+projekt;Kommunizieren;Communiquer;Comunicare
+projekt;Kunden;Clients;Clienti
+projekt;KI im Arbeitsalltag – Workshop;L'IA au quotidien professionnel – atelier;L'IA nel lavoro quotidiano – workshop
+projekt;Normen;Normes;Norme
+projekt;Persönliche Kompetenz;Compétence personnelle;Competenza personale
+projekt;Präsentieren;Présenter;Presentare
+projekt;Projektmanagement;Gestion de projet;Gestione di progetti
+projekt;Qualitätsmanagement;Gestion de la qualité;Gestione della qualità
+projekt;Staat und Wirtschaft;État et économie;Stato ed economia
+projekt;Workshop-Seminar für Berufsbildner;Atelier-séminaire pour formateurs et formatrices;Seminario-workshop per formatori e formatrici
+projekt;Teams führen für Teamleitende Geomatik und Engineering;Diriger une équipe – pour responsables d'équipe en géomatique et ingénierie;Guidare un team – per responsabili di team in geomatica e ingegneria
+informatik;Datenformate, Schnittstellen, XML;Formats de données, interfaces, XML;Formati di dati, interfacce, XML
+informatik;Datenmodelle;Modèles de données;Modelli di dati
+informatik;IT Datenmanagement;Gestion des données informatiques;Gestione dei dati informatici
+informatik;IT Projekt;Projet informatique;Progetto informatico
+informatik;IT Recht;Droit informatique;Diritto informatico
+informatik;IT Sicherheit;Sécurité informatique;Sicurezza informatica

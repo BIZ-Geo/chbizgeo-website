@@ -34,10 +34,20 @@ Ausgabeverzeichnis vor dem Bauen auf; deshalb nie direkt auf die Repo-Wurzel bau
 | Skript | Zweck |
 |---|---|
 | `build_regions.py` | **Hauptskript.** Baut Root-Picker + `de/ fr/ it/`; ruft die drei folgenden auf, kopiert `assets/` je Region und übersetzt FR/IT. Meldet am Ende unübersetzte DE-Reste. |
-| `build.py` | Hauptseiten aus Inline-DE-HTML (fachausweis, weiterbildung, veranstaltungen, ueber-uns, anmeldung, kontakt, datenschutz). |
-| `build_modules.py` | 13 Modul-Detailseiten `modul-b1…s8.html` aus dem `MODULES`-Dict. |
+| `build.py` | Hauptseiten aus Inline-DE-HTML (fachausweis, weiterbildung, veranstaltungen, ueber-uns, anmeldung, kontakt, datenschutz); füllt ausserdem die `<!-- DATEN:… -->`-Bereiche der Quell-`index.html` (Module, Termine, Highlights). |
+| `build_modules.py` | 13 Modul-Detailseiten `modul-b1…s8.html` aus `daten/module.csv`. |
 | `build_index.py` | `assets/search-index.json` für den Frage-Bot. |
-| `translate_data.py` | **Übersetzungstabelle** `TRIPLES = [(DE, FR, IT), …]` (≈505 Einträge). |
+| `daten.py` | Liest `_source/daten/*.csv`, formatiert Daten/Zeiten je Sprache und liefert die FR/IT-Einträge der CSV-Inhalte an die Übersetzungstabelle. |
+| `translate_data.py` | **Übersetzungstabelle** `TRIPLES = [(DE, FR, IT), …]` für die festen Seitentexte; hängt am Ende die CSV-Übersetzungen an. |
+
+## Inhalte aus CSV (`_source/daten/`)
+
+Module (Beschreibungen, Kompetenzen, Voraussetzungen, Kurse, Lektionen, Preise), Fachgebiete,
+Kursangebot und Veranstaltungskalender werden **manuell in CSV-Dateien gepflegt** – Format und
+Spalten in `_source/daten/README.md`. Kurz: Semikolon, UTF-8, Spalten `…_de/_fr/_it`, Listen mit ` | `,
+Datum `TT.MM.JJJJ`. Vergangene Termine blendet der Build aus; fehlende FR/IT-Spalten meldet er
+(«⚠ CSV: … fehlende Übersetzungen»). Die Bereiche zwischen `<!-- DATEN:x -->` und
+`<!-- /DATEN:x -->` in `_source/index.html` werden bei jedem Build überschrieben – dort nicht von Hand ändern.
 | `assemble_single.py` u. a. | Hilfsskripte (eingebettete Präsentationsdatei, Höhenlinien, Varianten). |
 
 ## Übersetzung pflegen
@@ -80,17 +90,19 @@ dann arbeitet Claude in GitHub Actions am Repo und öffnet PRs.
 
 ## Offene To-dos
 
-- **Live-Fix ausstehend:** FR/IT im Repo sind noch die Version *vor* dem „Lektionen"-Fix.
-  Erster `./build.sh` + Push bringt die Korrektur (leçons/lezioni, Breadcrumbs, Modul-Badges) live.
-- FHNW-Infoanlass: echtes Datum (aktuell „Termin folgt").
-- QSK: direkte PDF-Links statt Übersichtsseite.
 - Teamseite: Kernteam mit Fotos, Dozierende als Text.
-- Datenmodell: Module/Kurse/Veranstaltungen je Region aus XLSX/CSV speisen.
+- Datenmodell: Inhalte kommen aus CSV (s. oben); offen ist die Unterscheidung je Region
+  (z. B. Spalte `region` für Termine/Kurse der Romandie bzw. des Tessins).
+- Downloads (Schulplanung, Teilnahmebedingungen) liegen noch auf geo-education.ch → vor dem
+  Domainwechsel ins Repo holen.
+- Kalender aktuell halten: Website zeigt den Stand des letzten Builds (regelmässig bauen/pushen
+  oder per GitHub Action automatisieren).
 - Livegang: `BASE`/hreflang auf biz-geo.ch; geprüfte Datenschutzerklärung (revidiertes DSG).
 
 ## Konventionen für Claude Code
 
 1. Quelle in `_source/` bearbeiten – **nie** die generierten `de/ fr/ it/` oder die Wurzel-`index.html`.
-2. Neue Texte immer mit FR/IT in `translate_data.py` nachziehen.
+2. Inhalte (Module, Kurse, Termine, Preise) in `_source/daten/*.csv` ändern, nicht im Code. Neue feste
+   Seitentexte immer mit FR/IT in `translate_data.py` nachziehen.
 3. `./build.sh` ausführen, Übersetzungscheck ansehen, dann committen & pushen.
 4. CD strikt einhalten (weisse Schrift auf Blau; Rot nur Logo).

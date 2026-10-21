@@ -4,10 +4,63 @@
 Header und Footer werden aus index.html extrahiert, damit es genau eine
 Quelle der Wahrheit gibt. Aufruf:  python3 _build/build.py
 """
-import re, pathlib
+import html, re, pathlib
+import daten
+
+esc = lambda t: html.escape(t, quote=False)
+MODULE = daten.module()
+EVENTS = daten.veranstaltungen()
+HIGHLIGHTS = daten.highlights(EVENTS)
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 index = (ROOT / "index.html").read_text(encoding="utf-8")
+
+
+def home_module(kind):
+    return "".join(f"""      <a class="module module--{kind}" href="modul-{k}.html">
+        <img class="module__icon" src="assets/eyecatcher/{m['code']}.png" alt="Eyecatcher Modul {m['code']} – {esc(m['title'])}" loading="lazy">
+        <span class="module__body">
+          <span class="module__code">Modul {m['code']}</span>
+          <span class="module__title">{esc(m['title'])}</span>
+        </span>
+      </a>
+""" for k, m in MODULE.items() if m["kind"] == kind)
+
+
+def home_termine():
+    mon = daten.MONATE_KURZ["de"]
+    return "".join(f"""      <li>
+        <span class="event__date"><b>{e["von"].day:02}</b><span>{mon[e["von"].month - 1]}</span></span>
+        <span>
+          <span class="event__title">{esc(e["titel"]["de"])}</span><br>
+          <span class="event__meta">{esc(e["meta"]["de"])}</span>
+        </span>
+        <span class="event__tag">{e["typ"]}</span>
+      </li>
+""" for e in [e for e in EVENTS if e["startseite"]][:5])
+
+
+def home_highlights():
+    out = ""
+    # Highlights mit startseite=ja zuerst, dann nach Datum; höchstens drei Kacheln
+    for h in sorted(HIGHLIGHTS, key=lambda h: not h["startseite"])[:3]:
+        zeilen = [h["ort"]["de"], h["wann"]["de"]] if h["mehrfach"] else [h["wann"]["de"]]
+        zeilen.append(h["text"]["de"])
+        tag = (f'        <span class="event__tag card__tag">Partner · {esc(h["partner"])}</span>\n'
+               if h["partner"] else "")
+        out += ('      <a class="card card--tone" href="veranstaltungen.html#highlights">\n'
+                f'        <h3>{esc(h["titel"]["de"])}</h3>\n'
+                + "".join(f"        <p>{esc(z)}</p>\n" for z in zeilen if z)
+                + tag + "      </a>\n")
+    return out
+
+
+# Datengetriebene Bereiche der Startseite (zwischen <!-- DATEN:x --> und <!-- /DATEN:x -->) füllen
+for _name, _inhalt in (("basismodule", home_module("basis")), ("wahlmodule", home_module("wahl")),
+                       ("termine", home_termine()), ("highlights", home_highlights())):
+    index = re.sub(rf"(<!-- DATEN:{_name} -->\n).*?(<!-- /DATEN:{_name} -->)",
+                   lambda mt, i=_inhalt: mt.group(1) + i + mt.group(2), index, flags=re.S)
+(ROOT / "index.html").write_text(index, encoding="utf-8")
 
 HEADER = index[index.index("<!-- ================================================================ HEADER -->"):
                index.index("<!-- ================================================================== HERO -->")]
@@ -75,13 +128,8 @@ def module_card(kind, code, title, meta, anchor):
 
 
 # --------------------------------------------------------------- FACHAUSWEIS
-basis = [("B1", "Persönliche Kompetenzen", "b1"), ("B2", "Kommunikation", "b2"),
-         ("B3", "Geschäftsprozesse", "b3"), ("B4", "Geomatik + IT", "b4"),
-         ("B5", "IT Administration", "b5")]
-wahl = [("S1", "Amtliche Vermessung", "s1"), ("S2", "3D-Geodaten", "s2"),
-        ("S3", "Landmanagement", "s3"), ("S4", "Geomatik im Bauwesen", "s4"),
-        ("S5", "GIS", "s5"), ("S6", "Erfassungstechnik", "s6"),
-        ("S7", "Fixpunkte", "s7"), ("S8", "Bautechnik", "s8")]
+basis = [(m["code"], esc(m["title"]), k) for k, m in MODULE.items() if m["kind"] == "basis"]
+wahl = [(m["code"], esc(m["title"]), k) for k, m in MODULE.items() if m["kind"] == "wahl"]
 
 fa_body = hero(
     "Eidg. Fachausweis",
@@ -241,38 +289,9 @@ page("fachausweis.html", "Eidg. Fachausweis Geomatiktechnik",
      fa_body)
 
 # -------------------------------------------------------------- WEITERBILDUNG
-# Kurslisten je Fachgebiet: Stand Kursangebot geo-education.ch, Oktober 2026
-fields = [
-    ("Geomatik, Vermessung und Ingenieurbereich",
-     "Amtliche Vermessung, Fixpunkte, Erfassungstechnik und Ingenieurvermessung.",
-     ["Alpine Fernerkundung", "Amtliche Vermessung", "Baugrund / Geologie", "Digitale Photogrammetrie",
-      "Fehlertheorie", "Fixpunktnetze", "Fixpunktnetze mit rmDATA",
-      "Geodatenmodell der amtlichen Vermessung DMAV", "Grundbuchrechte / Rechte",
-      "Hydrologie und Wasserbau", "Ingenieurvermessung", "IoT und Sensorik mit RaspberryPi",
-      "Klimawandel sichtbar machen", "Messtechnik", "Mobilität &amp; Infrastruktur", "ÖREB &amp; DMAV",
-      "Raumplanung", "Technisches Rechnen", "Umwelttechnik", "Werkleitungskataster"]),
-    ("GIS – Geoinformation",
-     "Geodatenmodellierung, Analyse, Publikation und Geodateninfrastrukturen.",
-     ["Datenbank", "Datenbankverarbeitung FME", "GIS Betriebsorganisation", "GIS Kompetenz",
-      "GIS Werkstatt", "Interlis", "QGIS Vertiefung und OGD", "Netzinformationssysteme",
-      "Python – Geodatenverarbeitung"]),
-    ("3D-Geodaten",
-     "Punktwolken, Fernerkundung, Modellierung und Visualisierung.",
-     ["Additive Fertigung", "Bauvermessung und BIM", "BIM-Datenmanagement",
-      "BIM Einführung in die BIM-Methode und Labor", "BIM und COBie Grundlagen und Technologien",
-      "rmDATA 3DWorx to BIM", "Mobile Mapping mit SLAM-Technologie", "3D-Geodatenerfassung",
-      "3D-Geodatenverwaltung", "3D-Objekte aus Bilddaten digital rekonstruieren"]),
-    ("Projektmanagement, Führung und Kommunikation",
-     "Methodenkompetenz für Projekt-, Team- und Kundenarbeit.",
-     ["Arbeitstechnik", "Berufsbildnerkurs", "Kommunizieren", "Kunden", "KI im Arbeitsalltag – Workshop",
-      "Normen", "Persönliche Kompetenz", "Präsentieren", "Projektmanagement", "Qualitätsmanagement",
-      "Staat und Wirtschaft", "Workshop-Seminar für Berufsbildner",
-      "Teams führen für Teamleitende Geomatik und Engineering"]),
-    ("Informatik",
-     "IT-Grundlagen, Administration und Automatisierung im Geomatikumfeld.",
-     ["Datenformate, Schnittstellen, XML", "Datenmodelle", "IT Datenmanagement", "IT Projekt",
-      "IT Recht", "IT Sicherheit"]),
-]
+# Fachgebiete und Kursangebot: _source/daten/fachgebiete.csv + kursangebot.csv
+fields = [(esc(f["titel"]["de"]), esc(f["beschreibung"]["de"]), [esc(k["de"]) for k in f["kurse"]])
+          for f in daten.fachgebiete()]
 
 wb_body = hero(
     "Weiterbildung",
@@ -310,9 +329,10 @@ wb_body = hero(
         </span>
       </a>
 """ for key, kind, code, t, meta in [
-    ("S2", "wahl", "Kurs S8-26", "Alpine Fernerkundung", "28.–30. Oktober 2026 · Davos · 3 Tage"),
-    ("S2", "wahl", "Einzelkurs", "Mobile Mapping mit SLAM-Technologie", "20. November 2026 · Inforama Rütti"),
-    ("S2", "wahl", "Einzelkurs", "3D-Objekte aus Bilddaten digital rekonstruieren", "8. Dezember 2026 · Inforama Rütti"),
+    (e["modul"] or "S2", "basis" if (e["modul"] or "S").startswith("B") else "wahl",
+     f"Kurs {e['klasse']}" if e["klasse"] else "Einzelkurs", esc(e["titel"]["de"]),
+     esc(" · ".join(x for x in (e["datum_lang"]["de"], e["ort"]["de"]) if x)))
+    for e in [e for e in EVENTS if e["typ"] == "Kurs"][:3]
 ]) + """
     </div>
     <p class="note mt-2">
@@ -351,23 +371,30 @@ page("weiterbildung.html", "Weiterbildung und Einzelkurse",
      wb_body)
 
 # ------------------------------------------------------------ VERANSTALTUNGEN
-# Stand Veranstaltungskalender geo-education.ch, 21.10.2026 (mehrtägige Blöcke zusammengefasst)
-events = [
-    ("22", "Okt", "Fixpunktnetze (S7-26)", "12:45 – 20:30 Uhr", "Unterricht"),
-    ("23", "Okt", "Wasserbau / Hydrologie (S8-26)", "23.–24.10.2026 · PH Zürich", "Unterricht"),
-    ("27", "Okt", "Kommunizieren (B2-2026)", "08:30 – 16:30 Uhr · PH Zürich", "Unterricht"),
-    ("28", "Okt", "Alpine Fernerkundung (S8-26), Davos", "28.–30.10.2026", "Kurs"),
-    ("30", "Okt", "Dozentinnen- und Dozentenkonferenz Zürich", "18:00 – 21:00 Uhr · PH Zürich", "Anlass"),
-    ("31", "Okt", "Datenmodelle (B4-2026)", "08:30 – 16:30 Uhr · PH Zürich", "Unterricht"),
-    ("03", "Nov", "Berufsbildnerkurs (B1-2026)", "08:30 – 16:30 Uhr", "Kurs"),
-    ("13", "Nov", "ÖREB &amp; DMAV (S1-26)", "08:30 – 16:30 Uhr · PH Zürich", "Unterricht"),
-    ("20", "Nov", "Mobile Mapping mit SLAM-Technologie", "08:30 – 16:30 Uhr · Inforama Rütti", "Kurs"),
-    ("26", "Nov", "3D-Geodatenerfassung und -verwaltung (S2-27)", "26.–28.11.2026", "Unterricht"),
-    ("27", "Nov", "Abschlussfeier Fachausweis Geomatiktechnik 2026, Bern", "18:00 – 21:00 Uhr · Hotel Kreuz", "Highlight"),
-    ("03", "Dez", "Modulabschluss Bautechnik (S8-26)", "17:00 – 19:00 Uhr · PH Zürich", "Prüfung"),
-    ("08", "Dez", "3D-Objekte aus Bilddaten digital rekonstruieren", "08:30 – 16:30 Uhr · Inforama Rütti", "Kurs"),
-    ("10", "Dez", "Modulabschluss Persönliche Kompetenzen (B1-2026)", "17:00 – 19:00 Uhr · PH Zürich", "Prüfung"),
-]
+# Termine: _source/daten/veranstaltungen.csv (vergangene werden beim Build ausgeblendet)
+MON = daten.MONATE_KURZ["de"]
+
+
+def event_items(events):
+    return "".join(f"""      <li>
+        <span class="event__date"><b>{e["von"].day:02}</b><span>{MON[e["von"].month - 1]}</span></span>
+        <span><span class="event__title">{esc(e["titel"]["de"])}</span><br><span class="event__meta">{esc(e["meta"]["de"])}</span></span>
+        <span class="event__tag">{e["typ"]}</span>
+      </li>
+""" for e in events)
+
+
+def highlight_cards(items):
+    out = ""
+    for h in items:
+        tag = (f'        <span class="event__tag" style="border-color:var(--geo-navy-2);color:var(--geo-navy-2);'
+               f'margin-bottom:.6rem;display:inline-block">Partner · {esc(h["partner"])}</span>\n') if h["partner"] else ""
+        ort = f'        <p>{esc(h["ort"]["de"])}</p>\n' if h["mehrfach"] and h["ort"]["de"] else ""
+        text = f'        <p>{esc(h["text"]["de"])}</p>\n' if h["text"]["de"] else ""
+        out += (f'      <div class="card">\n{tag}        <h3>{esc(h["titel"]["de"])}</h3>\n{ort}'
+                f'        <p>{esc(h["wann"]["de"])}</p>\n{text}      </div>\n')
+    return out
+
 
 va_body = hero(
     "Veranstaltungen",
@@ -378,12 +405,7 @@ va_body = hero(
     <p class="eyebrow">Alle Termine</p>
     <h2 style="font-size:var(--step-2)">Kommende Veranstaltungen</h2>
     <ul class="events mt-2">
-""" + "".join(f"""      <li>
-        <span class="event__date"><b>{d}</b><span>{m}</span></span>
-        <span><span class="event__title">{t}</span><br><span class="event__meta">{meta}</span></span>
-        <span class="event__tag">{tag}</span>
-      </li>
-""" for d, m, t, meta, tag in events) + """
+""" + event_items(EVENTS) + """
     </ul>
     <p class="lead mt-2" style="font-size:.95rem">
       Im Livebetrieb: Filter nach Typ (Unterricht, Prüfung, Kurs, Anlass, Frist), Sprachregion
@@ -399,32 +421,7 @@ va_body = hero(
     <p class="lead mb-3">Ausgewählte Höhepunkte im Jahr – über den regulären Unterricht hinaus.
       Hier zeigen wir auch Hinweise unserer Partnerschulen.</p>
     <div class="grid grid--3">
-      <div class="card">
-        <h3>Abschlussfeier 2026</h3>
-        <p>27. November 2026 · Bern, Hotel Kreuz</p>
-        <p>Feierliche Übergabe der eidg. Fachausweise Geomatiktechnik.</p>
-      </div>
-      <div class="card">
-        <span class="event__tag" style="border-color:var(--geo-navy-2);color:var(--geo-navy-2);margin-bottom:.6rem;display:inline-block">Partner · FHNW</span>
-        <h3>Infoanlass Bachelor Geomatik</h3>
-        <p>FHNW · Muttenz</p>
-        <p>Infoanlässe und „Student for a day“ zum Bachelorstudium Geomatik an der FHNW.</p>
-        <p>22.10., 28.10., 5.11., 24.11. und 3.12.2026</p>
-      </div>
-      <div class="card">
-        <h3>Alpine Fernerkundung</h3>
-        <p>28.–30. Oktober 2026 · Davos</p>
-        <p>Dreitägiger Praxiskurs in hochalpiner Umgebung.</p>
-      </div>
-      <div class="card">
-        <h3>Mobile Mapping mit SLAM-Technologie</h3>
-        <p>20. November 2026 · Inforama Rütti</p>
-      </div>
-      <div class="card">
-        <h3>3D-Objekte aus Bilddaten digital rekonstruieren</h3>
-        <p>8. Dezember 2026 · Inforama Rütti</p>
-      </div>
-    </div>
+""" + highlight_cards(HIGHLIGHTS) + """    </div>
   </div>
 </section>
 """
