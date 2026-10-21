@@ -603,6 +603,11 @@ _mods = ["B1", "B2", "B3", "B4", "B5", "S1", "S2", "S3", "S4", "S5", "S6", "S7",
 for _c in _mods:
     TRIPLES.append((f"Modul {_c}", f"Module {_c}", f"Modulo {_c}"))
 
+# Inhalte aus _source/daten/*.csv (Module, Fachgebiete, Kursangebot, Veranstaltungen).
+# Sie stehen nach der Tabelle, damit die CSV-Übersetzungen Vorrang haben.
+from daten import csv_triples as _csv_triples
+TRIPLES += _csv_triples()
+
 # Breadcrumb-Endsegmente ">&nbsp;/&nbsp; LABEL<" (Separator + Label in EINEM Textknoten)
 _look = {de: (fr, it) for de, fr, it in TRIPLES}
 _crumb_labels = ["Anmeldung", "Datenschutz", "Eidg. Fachausweis", "Kontakt",

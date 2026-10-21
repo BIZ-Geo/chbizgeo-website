@@ -185,6 +185,16 @@ def main():
         else:
             print(f"  ✓ /{region}/: keine deutschen Text-Knoten mehr gefunden")
 
+    # Fehlende FR/IT-Spalten in den CSV-Dateien (dort bleibt vorerst der deutsche Text stehen)
+    from daten import luecken
+    fehlend = luecken()
+    if fehlend:
+        print(f"  ⚠ CSV: {len(fehlend)} fehlende Übersetzungen:")
+        for f in fehlend[:30]:
+            print("      -", f)
+    else:
+        print("  ✓ CSV: alle FR/IT-Spalten ausgefüllt")
+
 
 if __name__ == "__main__":
     main()
