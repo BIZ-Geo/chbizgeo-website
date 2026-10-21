@@ -1,0 +1,59 @@
+name: Website bauen und veröffentlichen
+
+# Baut die Site aus _source/ (inkl. CSV-Daten) und veröffentlicht sie auf GitHub Pages.
+# Täglich neu, damit vergangene Termine verschwinden; ausserdem bei Änderungen an _source/.
+# Voraussetzung: Settings → Pages → Source = "GitHub Actions".
+on:
+  schedule:
+    - cron: "15 1 * * *"   # 01:15 UTC = 02:15/03:15 Uhr Schweizer Zeit
+  push:
+    branches: [main]
+    paths:
+      - "_source/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Zurich   # "heute" für den Kalender in Schweizer Zeit
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Site bauen
+        run: |
+          cd _source
+          ./build.sh
+
+      - name: Veröffentlichte Teile zusammenstellen
+        run: |
+          mkdir _site
+          cp -r index.html de fr it _site/
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
