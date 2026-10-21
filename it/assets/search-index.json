@@ -21,7 +21,7 @@
   "page": "Startseite",
   "url": "index.html",
   "title": "Nächste Veranstaltungen",
-  "text": "Aus dem Kalender Die Terminliste wird direkt aus der Veranstaltungsdatenbank gespeist. 17 Aug Initial Workshop Klasse B1-2026 10:30 – 21:00 Uhr · Lehrgang Highlight 04 Sep Anmeldeschluss Abschlussarbeit eidg. Fachausweis, Session 2027-1 Ganztägig · Berufsprüfung Frist 02 Okt Klimawandel sichtbar machen (S8-26) 14:00 – 17:00 Uhr · Einzelkurs Kurs 28 Okt Alpine Fernerkundung (S8-26), Davos 28.–30.10.2026 · Einzelkurs Kurs 27 Nov Abschlussfeier Fachausweis Geomatiktechnik 2026, Bern 18:00 – 21:00 Uhr · Hotel Kreuz Highlight Ausgewählte Höhepunkte im Jahr – auch Hinweise unserer Partnerschulen. 27. November 2026 · Bern, Hotel Kreuz Feierliche Übergabe der eidg. Fachausweise Geomatiktechnik. FHNW · Muttenz Informationsabend zum Bachelorstudium Geomatik. Termin folgt. Partner · FHNW 28.–30. Oktober 2026 · Davos Dreitägiger Praxiskurs in hochalpiner Umgebung."
+  "text": "Aus dem Kalender Die Terminliste wird direkt aus der Veranstaltungsdatenbank gespeist. 22 Okt Fixpunktnetze (S7-26) 12:45 – 20:30 Uhr · Lehrgang Unterricht 28 Okt Alpine Fernerkundung (S8-26), Davos 28.–30.10.2026 · Einzelkurs Kurs 20 Nov Mobile Mapping mit SLAM-Technologie 08:30 – 16:30 Uhr · Inforama Rütti Kurs 27 Nov Abschlussfeier Fachausweis Geomatiktechnik 2026, Bern 18:00 – 21:00 Uhr · Hotel Kreuz Highlight 03 Dez Modulabschluss Bautechnik (S8-26) 17:00 – 19:00 Uhr · PH Zürich Prüfung Ausgewählte Höhepunkte im Jahr – auch Hinweise unserer Partnerschulen. 27. November 2026 · Bern, Hotel Kreuz Feierliche Übergabe der eidg. Fachausweise Geomatiktechnik. FHNW · Muttenz Infoanlässe und „Student for a day“ – nächste Termine 22.10., 28.10., 5.11., 24.11. und 3.12.2026. Partner · FHNW 28.–30. Oktober 2026 · Davos Dreitägiger Praxiskurs in hochalpiner Umgebung."
  },
  {
   "page": "Startseite",
@@ -45,7 +45,7 @@
   "page": "Eidg. Fachausweis",
   "url": "fachausweis.html#ueberblick",
   "title": "Aufbau, Dauer, Kosten",
-  "text": "Auf einen Blick Alle Eckdaten, die vor der Anmeldung zählen – ohne Suchen. Aufbau 5 Basismodule + mind. 5 Wahlmodule + Abschlussarbeit Dauer Rund 2 Jahre berufsbegleitend Unterricht Blended Learning, Präsenztage regional verteilt Kosten Modulpreise gemäss Preisliste; Bundesbeiträge möglich Voraussetzungen EFZ Geomatiker/in oder gleichwertige Qualifikation mit Berufspraxis Abschluss Eidg. Fachausweis nach bestandener Berufsprüfung"
+  "text": "Auf einen Blick Alle Eckdaten, die vor der Anmeldung zählen – ohne Suchen. Aufbau 5 Basismodule + mind. 5 Wahlmodule + Abschlussarbeit Dauer Rund 2 Jahre berufsbegleitend Unterricht Präsenzkurse primär in Zürich oder Zug, viele Kurstage online Kosten Modulpreise gemäss Preisliste; Bundesbeiträge möglich Voraussetzungen EFZ Geomatiker/in oder gleichwertige Qualifikation mit Berufspraxis Abschluss Eidg. Fachausweis nach bestandener Berufsprüfung"
  },
  {
   "page": "Eidg. Fachausweis",
@@ -61,6 +61,12 @@
  },
  {
   "page": "Eidg. Fachausweis",
+  "url": "fachausweis.html#regeln",
+  "title": "Regeln im Lehrgang",
+  "text": "Gut zu wissen Was für Planung, Anmeldung und Modulprüfungen gilt. Modulprüfungen Jedes Modul schliesst mit einer Modulprüfung ab; bestanden ab Note 4, gültig während sechs Jahren. Lehrgangsstart Die Basismodule starten jeweils im August und dauern bis Juli des Folgejahres. Die Studienplätze sind beschränkt. Wahlmodule Am besten nach den Basismodulen besuchen. Bei der Anmeldung den Klassencode angeben, z. B. S1-27 (siehe Modulplanung). Planung Mindestens zwei Jahre einplanen. Für die Ferienplanung gilt der Ferienplan des Kantons Zürich . Technik Persönlicher Laptop erforderlich; die GIS-Module benötigen Windows. Berufsprüfung Anmeldung jeweils sechs Monate vor Prüfungsbeginn; bis dahin müssen alle gültigen Modulabschlüsse vorliegen."
+ },
+ {
+  "page": "Eidg. Fachausweis",
   "url": "fachausweis.html#ablauf",
   "title": "Weg zum Abschluss",
   "text": "Weg zum Abschluss Beratung und Standortbestimmung Wir klären mit Ihnen Voraussetzungen, Anrechnungen und den passenden Einstiegszeitpunkt. Anmeldung zum Lehrgang Anmeldung online; Aufnahme auf die Warteliste, falls ein Modul ausgebucht ist. Basismodule absolvieren Fünf Module mit je einem Modulabschluss. Wahlmodule vertiefen Mindestens fünf Module nach fachlichem Schwerpunkt. Abschlussarbeit und Berufsprüfung Anmeldung zur eidg. Berufsprüfung über die Qualitätssicherungskommission (QSK)."
@@ -69,13 +75,13 @@
   "page": "Eidg. Fachausweis",
   "url": "fachausweis.html#downloads",
   "title": "Schul- und Moduldaten",
-  "text": "Downloads Aktuelle Planungsdokumente zum Herunterladen. Schulplanung BIZ Geo – Gesamtübersicht XLSX · aktuelle Version Schulplanung Basismodule B1–B5 PDF Schulplanung Wahlmodule S1–S8 PDF Modulprüfungen – Termine PDF Modulplanung 2026–2028 PDF Hinweis aus dem Workshop: Der bisherige Studierendenbereich (Dokumente, interne Unterlagen) wird künftig über Microsoft Teams abgewickelt und entfällt auf der Website. Öffentlich bleiben nur die hier gezeigten Planungsdokumente."
+  "text": "Downloads Aktuelle Planungsdokumente zum Herunterladen. Schulplanung BIZ Geo – Gesamtübersicht XLSX · Stand 20.08.2026 Schuldatenliste PDF · Stand 20.08.2026 Schulplanung Basismodule B1–B5 PDF Schulplanung Wahlmodule S1–S8 PDF Modulprüfungen – Termine PDF Modulplanung 2025–2027 PDF · Stand 19.07.2026 Hinweis aus dem Workshop: Der bisherige Studierendenbereich (Dokumente, interne Unterlagen) wird künftig über Microsoft Teams abgewickelt und entfällt auf der Website. Öffentlich bleiben nur die hier gezeigten Planungsdokumente."
  },
  {
   "page": "Eidg. Fachausweis",
   "url": "fachausweis.html#berufspruefung",
   "title": "Berufsprüfung",
-  "text": "Abschluss Der Lehrgang schliesst mit der eidgenössischen Berufsprüfung Geomatiktechnik ab. Prüfungsordnung, Wegleitung und Durchführung verantwortet die Qualitätssicherungskommission (QSK). Mehr zur QSK → Prüfungsordnung & Wegleitung QSK Anmeldung Berufsprüfung QSK Bundesbeiträge (SBFI) Finanzierung"
+  "text": "Abschluss Der Lehrgang schliesst mit der eidgenössischen Berufsprüfung Geomatiktechnik ab. Prüfungsordnung, Wegleitung und Durchführung verantwortet die Qualitätssicherungskommission (QSK). Mehr zur QSK → Prüfungsordnung PDF · QSK Wegleitung zur Prüfungsordnung PDF · QSK Anmeldung Berufsprüfung Portal Trägerverein Teilnahmebedingungen PDF Antrag Gleichwertigkeit Module PDF · QSK Bundesbeiträge (SBFI) Finanzierung"
  },
  {
   "page": "Eidg. Fachausweis",
@@ -93,13 +99,13 @@
   "page": "Weiterbildung",
   "url": "weiterbildung.html#fachgebiete",
   "title": "Fachgebiete",
-  "text": "Fachgebiete Fünf Fachgebiete bündeln das gesamte Kursangebot. Amtliche Vermessung, Fixpunkte, Erfassungstechnik und Ingenieurvermessung. Geodatenmodellierung, Analyse, Publikation und Geodateninfrastrukturen. Punktwolken, Fernerkundung, Modellierung und Visualisierung. Methodenkompetenz für Projekt-, Team- und Kundenarbeit. IT-Grundlagen, Administration und Automatisierung im Geomatikumfeld."
+  "text": "Fachgebiete Fünf Fachgebiete bündeln das gesamte Kursangebot. Amtliche Vermessung, Fixpunkte, Erfassungstechnik und Ingenieurvermessung. Alpine Fernerkundung Amtliche Vermessung Baugrund / Geologie Digitale Photogrammetrie Fehlertheorie Fixpunktnetze Fixpunktnetze mit rmDATA Geodatenmodell der amtlichen Vermessung DMAV Grundbuchrechte / Rechte Hydrologie und Wasserbau Ingenieurvermessung IoT und Sensorik mit RaspberryPi Klimawandel sichtbar machen Messtechnik Mobilität & Infrastruktur ÖREB & DMAV Raumplanung Technisches Rechnen Umwelttechnik Werkleitungskataster Geodatenmodellierung, Analyse, Publikation und Geodateninfrastrukturen. Datenbank Datenbankverarbeitung FME GIS Betriebsorganisation GIS Kompetenz GIS Werkstatt Interlis QGIS Vertiefung und OGD Netzinformationssysteme Python – Geodatenverarbeitung Punktwolken, Fernerkundung, Modellierung und Visualisierung. Additive Fertigung Bau"
  },
  {
   "page": "Weiterbildung",
   "url": "weiterbildung.html#kurse",
   "title": "Aktuelle Kurse",
-  "text": "Nächste Durchführungen Kurs S8-26 Alpine Fernerkundung 28.–30. Oktober 2026 · Davos · 3 Tage Kurs S8-26 Klimawandel sichtbar machen 2. Oktober 2026 · 14:00–17:00 Uhr Kurs B1-2026 Berufsbildnerkurs 2. September 2026 · 08:30–16:30 Uhr Jeder Kurs trägt das Eyecatcher-Motiv seines Moduls – die Kachelfläche entspricht der Motivfarbe (Basismodule Greige, Wahlmodule Secondary Navy). Im Livebetrieb wird diese Liste aus der Veranstaltungsdatenbank gefüllt und lässt sich nach Fachgebiet, Datum, Ort und Sprache filtern."
+  "text": "Nächste Durchführungen Kurs S8-26 Alpine Fernerkundung 28.–30. Oktober 2026 · Davos · 3 Tage Einzelkurs Mobile Mapping mit SLAM-Technologie 20. November 2026 · Inforama Rütti Einzelkurs 3D-Objekte aus Bilddaten digital rekonstruieren 8. Dezember 2026 · Inforama Rütti Jeder Kurs trägt das Eyecatcher-Motiv seines Moduls – die Kachelfläche entspricht der Motivfarbe (Basismodule Greige, Wahlmodule Secondary Navy). Im Livebetrieb wird diese Liste aus der Veranstaltungsdatenbank gefüllt und lässt sich nach Fachgebiet, Datum, Ort und Sprache filtern."
  },
  {
   "page": "Weiterbildung",
@@ -117,13 +123,13 @@
   "page": "Veranstaltungen",
   "url": "veranstaltungen.html",
   "title": "Kommende Veranstaltungen",
-  "text": "Alle Termine 17 Aug Initial Workshop Klasse B1-2026 10:30 – 21:00 Uhr · Lehrgang Highlight 18 Aug Modulabschluss Geomatik im Bauwesen (S4-26) 17:00 – 19:00 Uhr Prüfung 20 Aug Modulabschluss IT Administration (B5-2025) 17:00 – 19:00 Uhr Prüfung 20 Aug Sommerferien-Apéro Klasse 2025 (B3-2025) 19:15 – 21:00 Uhr Anlass 21 Aug Modulabschluss Erfassungstechnik (S6-26) 17:00 – 19:00 Uhr Prüfung 28 Aug Arbeitstechnik (B1-2026) Ganztägig Unterricht 02 Sep Berufsbildnerkurs (B1-2026) 08:30 – 16:30 Uhr Kurs 04 Sep Anmeldeschluss Abschlussarbeit eidg. Fachausweis, Session 2027-1 Ganztägig Frist 04 Sep Dozentinnen- und Dozentenkonferenz Zürich 18:00 – 21:00 Uhr Anlass 02 Okt Klimawandel sichtbar machen (S8-26) 14:00 – 17:00 Uhr Kurs 28 Okt Alpine Fernerkundung (S8-26), Davos 28.–30.10.2026 Kurs 27 Nov Abschlussfeier Fachausweis Geomatiktechnik 2026, Bern 18:00 – 21:00 Uhr · Hotel Kreuz Highlight Im L"
+  "text": "Alle Termine 22 Okt Fixpunktnetze (S7-26) 12:45 – 20:30 Uhr Unterricht 23 Okt Wasserbau / Hydrologie (S8-26) 23.–24.10.2026 · PH Zürich Unterricht 27 Okt Kommunizieren (B2-2026) 08:30 – 16:30 Uhr · PH Zürich Unterricht 28 Okt Alpine Fernerkundung (S8-26), Davos 28.–30.10.2026 Kurs 30 Okt Dozentinnen- und Dozentenkonferenz Zürich 18:00 – 21:00 Uhr · PH Zürich Anlass 31 Okt Datenmodelle (B4-2026) 08:30 – 16:30 Uhr · PH Zürich Unterricht 03 Nov Berufsbildnerkurs (B1-2026) 08:30 – 16:30 Uhr Kurs 13 Nov ÖREB & DMAV (S1-26) 08:30 – 16:30 Uhr · PH Zürich Unterricht 20 Nov Mobile Mapping mit SLAM-Technologie 08:30 – 16:30 Uhr · Inforama Rütti Kurs 26 Nov 3D-Geodatenerfassung und -verwaltung (S2-27) 26.–28.11.2026 Unterricht 27 Nov Abschlussfeier Fachausweis Geomatiktechnik 2026, Bern 18:00 – 21:00 Uhr · Hotel Kreuz Highlight 03 Dez Modulabschluss Bautechnik (S8-26) 17:00 – 19:00 Uhr · PH Zürich "
  },
  {
   "page": "Veranstaltungen",
   "url": "veranstaltungen.html#highlights",
   "title": "Highlights",
-  "text": "Höhepunkte Ausgewählte Höhepunkte im Jahr – über den regulären Unterricht hinaus. Hier zeigen wir auch Hinweise unserer Partnerschulen. 27. November 2026 · Bern, Hotel Kreuz Feierliche Übergabe der eidg. Fachausweise Geomatiktechnik. Partner · FHNW FHNW · Muttenz Informationsabend zum Bachelorstudium Geomatik an der FHNW. Termin wird ergänzt. 28.–30. Oktober 2026 · Davos Dreitägiger Praxiskurs in hochalpiner Umgebung. 2. Oktober 2026 Geodaten als Werkzeug zur Visualisierung von Klimaveränderungen."
+  "text": "Höhepunkte Ausgewählte Höhepunkte im Jahr – über den regulären Unterricht hinaus. Hier zeigen wir auch Hinweise unserer Partnerschulen. 27. November 2026 · Bern, Hotel Kreuz Feierliche Übergabe der eidg. Fachausweise Geomatiktechnik. Partner · FHNW FHNW · Muttenz Infoanlässe und „Student for a day“ zum Bachelorstudium Geomatik an der FHNW. 22.10., 28.10., 5.11., 24.11. und 3.12.2026 28.–30. Oktober 2026 · Davos Dreitägiger Praxiskurs in hochalpiner Umgebung. 20. November 2026 · Inforama Rütti 8. Dezember 2026 · Inforama Rütti"
  },
  {
   "page": "Über uns",
@@ -147,7 +153,7 @@
   "page": "Über uns",
   "url": "ueber-uns.html#qsk",
   "title": "Qualitätssicherungskommission",
-  "text": "QSK Die QSK verantwortet die eidgenössische Berufsprüfung Geomatiktechnik: Reglement, Wegleitung, Prüfungsdurchführung und Qualitätssicherung. Prüfungsordnung Berufsprüfung Geomatiktechnik QSK Wegleitung zur Prüfungsordnung QSK Anmeldung Berufsprüfung (QSK) QSK Reglement Abschlussarbeit QSK"
+  "text": "QSK Die QSK verantwortet die eidgenössische Berufsprüfung Geomatiktechnik: Reglement, Wegleitung, Prüfungsdurchführung und Qualitätssicherung. Prüfungsordnung Berufsprüfung Geomatiktechnik PDF · QSK Wegleitung zur Prüfungsordnung PDF · QSK Anmeldung Berufsprüfung (QSK) Portal Trägerverein Antrag Gleichwertigkeit Module PDF · QSK Reglement Abschlussarbeit QSK"
  },
  {
   "page": "Über uns",
@@ -171,7 +177,7 @@
   "page": "Anmeldung",
   "url": "anmeldung.html",
   "title": "Anmeldung",
-  "text": "Anmeldung für den gesamten Lehrgang inkl. Basismodule. Basismodule 2026 sind ausgebucht – Anmeldungen werden auf die Warteliste aufgenommen. Basis- oder Wahlmodule separat buchen, mit Anrechnung an den Fachausweis. Anmeldung zur eidgenössischen Berufsprüfung über die Qualitätssicherungskommission."
+  "text": "Anmeldung für den gesamten Lehrgang inkl. Basismodule. Anmeldungen für die Basismodule 2027 sind ab sofort möglich – die Studienplätze sind beschränkt. Basis- oder Wahlmodule separat buchen, mit Anrechnung an den Fachausweis. Anmeldung zur eidgenössischen Berufsprüfung über die Qualitätssicherungskommission."
  },
  {
   "page": "Anmeldung",

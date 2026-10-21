@@ -103,7 +103,7 @@ fa_body = hero(
           <ul class="filelist">
             <li><strong>Aufbau</strong><br><span>5 Basismodule + mind. 5 Wahlmodule + Abschlussarbeit</span></li>
             <li><strong>Dauer</strong><br><span>Rund 2 Jahre berufsbegleitend</span></li>
-            <li><strong>Unterricht</strong><br><span>Blended Learning, Präsenztage regional verteilt</span></li>
+            <li><strong>Unterricht</strong><br><span>Präsenzkurse primär in Zürich oder Zug, viele Kurstage online</span></li>
             <li><strong>Kosten</strong><br><span>Modulpreise gemäss Preisliste; <a href="https://www.sbfi.admin.ch/de/bundesbeitraege-fuer-kurse-die-auf-eidgenoessische-pruefungen-vorbereiten" target="_blank" rel="noopener">Bundesbeiträge</a> möglich</span></li>
             <li><strong>Voraussetzungen</strong><br><span>EFZ Geomatiker/in oder gleichwertige Qualifikation mit Berufspraxis</span></li>
             <li><strong>Abschluss</strong><br><span>Eidg. Fachausweis nach bestandener Berufsprüfung</span></li>
@@ -143,6 +143,26 @@ fa_body = hero(
   </div>
 </section>
 
+<section class="section section--greige" id="regeln">
+  <div class="wrap">
+    <div class="grid grid--2">
+      <div>
+        <p class="eyebrow">Gut zu wissen</p>
+        <h2 style="font-size:var(--step-2)">Regeln im Lehrgang</h2>
+        <p class="lead">Was für Planung, Anmeldung und Modulprüfungen gilt.</p>
+      </div>
+      <ul class="filelist">
+        <li><strong>Modulprüfungen</strong><br><span>Jedes Modul schliesst mit einer Modulprüfung ab; bestanden ab Note 4, gültig während sechs Jahren.</span></li>
+        <li><strong>Lehrgangsstart</strong><br><span>Die Basismodule starten jeweils im August und dauern bis Juli des Folgejahres. Die Studienplätze sind beschränkt.</span></li>
+        <li><strong>Wahlmodule</strong><br><span>Am besten nach den Basismodulen besuchen. Bei der Anmeldung den Klassencode angeben, z. B. S1-27 (siehe Modulplanung).</span></li>
+        <li><strong>Planung</strong><br><span>Mindestens zwei Jahre einplanen. Für die Ferienplanung gilt der <a href="https://www.bbzh.ch/services/unterrichtszeiten-ferienplaene/" target="_blank" rel="noopener">Ferienplan des Kantons Zürich</a>.</span></li>
+        <li><strong>Technik</strong><br><span>Persönlicher Laptop erforderlich; die GIS-Module benötigen Windows.</span></li>
+        <li><strong>Berufsprüfung</strong><br><span>Anmeldung jeweils sechs Monate vor Prüfungsbeginn; bis dahin müssen alle gültigen Modulabschlüsse vorliegen.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <section class="section section--dark" id="ablauf">
   <div class="wrap">
     <p class="eyebrow">Weg zum Abschluss</p>
@@ -163,11 +183,12 @@ fa_body = hero(
     <h2 style="font-size:var(--step-2)">Schul- und Moduldaten</h2>
     <p class="lead mb-3">Aktuelle Planungsdokumente zum Herunterladen.</p>
     <ul class="filelist">
-      <li><a href="#">Schulplanung BIZ Geo – Gesamtübersicht</a> <span>XLSX · aktuelle Version</span></li>
-      <li><a href="#">Schulplanung Basismodule B1–B5</a> <span>PDF</span></li>
-      <li><a href="#">Schulplanung Wahlmodule S1–S8</a> <span>PDF</span></li>
-      <li><a href="#">Modulprüfungen – Termine</a> <span>PDF</span></li>
-      <li><a href="#">Modulplanung 2026–2028</a> <span>PDF</span></li>
+      <li><a href="https://geo-education.ch/wp-content/uploads/2026/08/Schulplanung__BIZGeo_20.08.2026.xlsx">Schulplanung BIZ Geo – Gesamtübersicht</a> <span>XLSX · Stand 20.08.2026</span></li>
+      <li><a href="https://geo-education.ch/wp-content/uploads/2026/08/2026-08-20_Schulplanung_BIZGeo_Schuldatenliste.pdf" target="_blank" rel="noopener">Schuldatenliste</a> <span>PDF · Stand 20.08.2026</span></li>
+      <li><a href="https://geo-education.ch/wp-content/uploads/2026/08/2026-09-21_Schulplanung_BIZGeo_B1-B5-1.pdf" target="_blank" rel="noopener">Schulplanung Basismodule B1–B5</a> <span>PDF</span></li>
+      <li><a href="https://geo-education.ch/wp-content/uploads/2026/08/2026-08-21_Schulplanung_BIZGeo_S1-S8.pdf" target="_blank" rel="noopener">Schulplanung Wahlmodule S1–S8</a> <span>PDF</span></li>
+      <li><a href="https://geo-education.ch/wp-content/uploads/2026/07/2026-07-19_Schulplanung_BIZGeo_Modulpruefungen.pdf" target="_blank" rel="noopener">Modulprüfungen – Termine</a> <span>PDF</span></li>
+      <li><a href="https://geo-education.ch/wp-content/uploads/2026/07/2026-07-19_Schulplanung_BIZGeo_2026.pdf" target="_blank" rel="noopener">Modulplanung 2025–2027</a> <span>PDF · Stand 19.07.2026</span></li>
     </ul>
     <p class="note mt-2">
       <strong>Hinweis aus dem Workshop:</strong> Der bisherige Studierendenbereich (Dokumente,
@@ -192,8 +213,11 @@ fa_body = hero(
       </div>
       <div>
         <ul class="filelist">
-          <li><a href="https://www.berufsbildung-geomatik.ch/de/weiterbildung/kommission-fuer-qualitaetssicherung-qsk.html" target="_blank" rel="noopener">Prüfungsordnung &amp; Wegleitung</a> <span>QSK</span></li>
-          <li><a href="https://www.berufsbildung-geomatik.ch/de/weiterbildung/kommission-fuer-qualitaetssicherung-qsk.html" target="_blank" rel="noopener">Anmeldung Berufsprüfung</a> <span>QSK</span></li>
+          <li><a href="https://www.berufsbildung-geomatik.ch/fileadmin/documents/Weiterbildung/QSK/PO_BP_Geomatiktechniker_d_genehmigt_20-05-2015.pdf" target="_blank" rel="noopener">Prüfungsordnung</a> <span>PDF · QSK</span></li>
+          <li><a href="https://www.berufsbildung-geomatik.ch/fileadmin/documents/Weiterbildung/QSK/Wegleitung_Geomatiktechniker_d.pdf" target="_blank" rel="noopener">Wegleitung zur Prüfungsordnung</a> <span>PDF · QSK</span></li>
+          <li><a href="http://portal.tv-geo.ch/" target="_blank" rel="noopener">Anmeldung Berufsprüfung</a> <span>Portal Trägerverein</span></li>
+          <li><a href="https://geo-education.ch/wp-content/uploads/2026/07/1_Teilnahmebedingungen_20260716.pdf" target="_blank" rel="noopener">Teilnahmebedingungen</a> <span>PDF</span></li>
+          <li><a href="https://geo-education.ch/wp-content/uploads/2020/06/Antragsformular-fu%CC%88r-Gleichwertigkeit_D.pdf" target="_blank" rel="noopener">Antrag Gleichwertigkeit Module</a> <span>PDF · QSK</span></li>
           <li><a href="https://www.sbfi.admin.ch/de/bundesbeitraege-fuer-kurse-die-auf-eidgenoessische-pruefungen-vorbereiten" target="_blank" rel="noopener">Bundesbeiträge (SBFI)</a> <span>Finanzierung</span></li>
         </ul>
       </div>
@@ -217,17 +241,37 @@ page("fachausweis.html", "Eidg. Fachausweis Geomatiktechnik",
      fa_body)
 
 # -------------------------------------------------------------- WEITERBILDUNG
+# Kurslisten je Fachgebiet: Stand Kursangebot geo-education.ch, Oktober 2026
 fields = [
     ("Geomatik, Vermessung und Ingenieurbereich",
-     "Amtliche Vermessung, Fixpunkte, Erfassungstechnik und Ingenieurvermessung."),
+     "Amtliche Vermessung, Fixpunkte, Erfassungstechnik und Ingenieurvermessung.",
+     ["Alpine Fernerkundung", "Amtliche Vermessung", "Baugrund / Geologie", "Digitale Photogrammetrie",
+      "Fehlertheorie", "Fixpunktnetze", "Fixpunktnetze mit rmDATA",
+      "Geodatenmodell der amtlichen Vermessung DMAV", "Grundbuchrechte / Rechte",
+      "Hydrologie und Wasserbau", "Ingenieurvermessung", "IoT und Sensorik mit RaspberryPi",
+      "Klimawandel sichtbar machen", "Messtechnik", "Mobilität &amp; Infrastruktur", "ÖREB &amp; DMAV",
+      "Raumplanung", "Technisches Rechnen", "Umwelttechnik", "Werkleitungskataster"]),
     ("GIS – Geoinformation",
-     "Geodatenmodellierung, Analyse, Publikation und Geodateninfrastrukturen."),
+     "Geodatenmodellierung, Analyse, Publikation und Geodateninfrastrukturen.",
+     ["Datenbank", "Datenbankverarbeitung FME", "GIS Betriebsorganisation", "GIS Kompetenz",
+      "GIS Werkstatt", "Interlis", "QGIS Vertiefung und OGD", "Netzinformationssysteme",
+      "Python – Geodatenverarbeitung"]),
     ("3D-Geodaten",
-     "Punktwolken, Fernerkundung, Modellierung und Visualisierung."),
+     "Punktwolken, Fernerkundung, Modellierung und Visualisierung.",
+     ["Additive Fertigung", "Bauvermessung und BIM", "BIM-Datenmanagement",
+      "BIM Einführung in die BIM-Methode und Labor", "BIM und COBie Grundlagen und Technologien",
+      "rmDATA 3DWorx to BIM", "Mobile Mapping mit SLAM-Technologie", "3D-Geodatenerfassung",
+      "3D-Geodatenverwaltung", "3D-Objekte aus Bilddaten digital rekonstruieren"]),
     ("Projektmanagement, Führung und Kommunikation",
-     "Methodenkompetenz für Projekt-, Team- und Kundenarbeit."),
+     "Methodenkompetenz für Projekt-, Team- und Kundenarbeit.",
+     ["Arbeitstechnik", "Berufsbildnerkurs", "Kommunizieren", "Kunden", "KI im Arbeitsalltag – Workshop",
+      "Normen", "Persönliche Kompetenz", "Präsentieren", "Projektmanagement", "Qualitätsmanagement",
+      "Staat und Wirtschaft", "Workshop-Seminar für Berufsbildner",
+      "Teams führen für Teamleitende Geomatik und Engineering"]),
     ("Informatik",
-     "IT-Grundlagen, Administration und Automatisierung im Geomatikumfeld."),
+     "IT-Grundlagen, Administration und Automatisierung im Geomatikumfeld.",
+     ["Datenformate, Schnittstellen, XML", "Datenmodelle", "IT Datenmanagement", "IT Projekt",
+      "IT Recht", "IT Sicherheit"]),
 ]
 
 wb_body = hero(
@@ -244,9 +288,10 @@ wb_body = hero(
     <div class="grid grid--3">
 """ + "".join(f"""      <div class="card">
         <h3>{t}</h3><p>{d}</p>
+        <div class="chips mt-2 mb-3">{"".join(f'<span class="chip">{k}</span>' for k in kurse)}</div>
         <a class="card__link" href="#kurse">Kurse ansehen →</a>
       </div>
-""" for t, d in fields) + """
+""" for t, d, kurse in fields) + """
     </div>
   </div>
 </section>
@@ -266,8 +311,8 @@ wb_body = hero(
       </a>
 """ for key, kind, code, t, meta in [
     ("S2", "wahl", "Kurs S8-26", "Alpine Fernerkundung", "28.–30. Oktober 2026 · Davos · 3 Tage"),
-    ("S5", "wahl", "Kurs S8-26", "Klimawandel sichtbar machen", "2. Oktober 2026 · 14:00–17:00 Uhr"),
-    ("B1", "basis", "Kurs B1-2026", "Berufsbildnerkurs", "2. September 2026 · 08:30–16:30 Uhr"),
+    ("S2", "wahl", "Einzelkurs", "Mobile Mapping mit SLAM-Technologie", "20. November 2026 · Inforama Rütti"),
+    ("S2", "wahl", "Einzelkurs", "3D-Objekte aus Bilddaten digital rekonstruieren", "8. Dezember 2026 · Inforama Rütti"),
 ]) + """
     </div>
     <p class="note mt-2">
@@ -306,19 +351,22 @@ page("weiterbildung.html", "Weiterbildung und Einzelkurse",
      wb_body)
 
 # ------------------------------------------------------------ VERANSTALTUNGEN
+# Stand Veranstaltungskalender geo-education.ch, 21.10.2026 (mehrtägige Blöcke zusammengefasst)
 events = [
-    ("17", "Aug", "Initial Workshop Klasse B1-2026", "10:30 – 21:00 Uhr · Lehrgang", "Highlight"),
-    ("18", "Aug", "Modulabschluss Geomatik im Bauwesen (S4-26)", "17:00 – 19:00 Uhr", "Prüfung"),
-    ("20", "Aug", "Modulabschluss IT Administration (B5-2025)", "17:00 – 19:00 Uhr", "Prüfung"),
-    ("20", "Aug", "Sommerferien-Apéro Klasse 2025 (B3-2025)", "19:15 – 21:00 Uhr", "Anlass"),
-    ("21", "Aug", "Modulabschluss Erfassungstechnik (S6-26)", "17:00 – 19:00 Uhr", "Prüfung"),
-    ("28", "Aug", "Arbeitstechnik (B1-2026)", "Ganztägig", "Unterricht"),
-    ("02", "Sep", "Berufsbildnerkurs (B1-2026)", "08:30 – 16:30 Uhr", "Kurs"),
-    ("04", "Sep", "Anmeldeschluss Abschlussarbeit eidg. Fachausweis, Session 2027-1", "Ganztägig", "Frist"),
-    ("04", "Sep", "Dozentinnen- und Dozentenkonferenz Zürich", "18:00 – 21:00 Uhr", "Anlass"),
-    ("02", "Okt", "Klimawandel sichtbar machen (S8-26)", "14:00 – 17:00 Uhr", "Kurs"),
+    ("22", "Okt", "Fixpunktnetze (S7-26)", "12:45 – 20:30 Uhr", "Unterricht"),
+    ("23", "Okt", "Wasserbau / Hydrologie (S8-26)", "23.–24.10.2026 · PH Zürich", "Unterricht"),
+    ("27", "Okt", "Kommunizieren (B2-2026)", "08:30 – 16:30 Uhr · PH Zürich", "Unterricht"),
     ("28", "Okt", "Alpine Fernerkundung (S8-26), Davos", "28.–30.10.2026", "Kurs"),
+    ("30", "Okt", "Dozentinnen- und Dozentenkonferenz Zürich", "18:00 – 21:00 Uhr · PH Zürich", "Anlass"),
+    ("31", "Okt", "Datenmodelle (B4-2026)", "08:30 – 16:30 Uhr · PH Zürich", "Unterricht"),
+    ("03", "Nov", "Berufsbildnerkurs (B1-2026)", "08:30 – 16:30 Uhr", "Kurs"),
+    ("13", "Nov", "ÖREB &amp; DMAV (S1-26)", "08:30 – 16:30 Uhr · PH Zürich", "Unterricht"),
+    ("20", "Nov", "Mobile Mapping mit SLAM-Technologie", "08:30 – 16:30 Uhr · Inforama Rütti", "Kurs"),
+    ("26", "Nov", "3D-Geodatenerfassung und -verwaltung (S2-27)", "26.–28.11.2026", "Unterricht"),
     ("27", "Nov", "Abschlussfeier Fachausweis Geomatiktechnik 2026, Bern", "18:00 – 21:00 Uhr · Hotel Kreuz", "Highlight"),
+    ("03", "Dez", "Modulabschluss Bautechnik (S8-26)", "17:00 – 19:00 Uhr · PH Zürich", "Prüfung"),
+    ("08", "Dez", "3D-Objekte aus Bilddaten digital rekonstruieren", "08:30 – 16:30 Uhr · Inforama Rütti", "Kurs"),
+    ("10", "Dez", "Modulabschluss Persönliche Kompetenzen (B1-2026)", "17:00 – 19:00 Uhr · PH Zürich", "Prüfung"),
 ]
 
 va_body = hero(
@@ -360,7 +408,8 @@ va_body = hero(
         <span class="event__tag" style="border-color:var(--geo-navy-2);color:var(--geo-navy-2);margin-bottom:.6rem;display:inline-block">Partner · FHNW</span>
         <h3>Infoanlass Bachelor Geomatik</h3>
         <p>FHNW · Muttenz</p>
-        <p>Informationsabend zum Bachelorstudium Geomatik an der FHNW. Termin wird ergänzt.</p>
+        <p>Infoanlässe und „Student for a day“ zum Bachelorstudium Geomatik an der FHNW.</p>
+        <p>22.10., 28.10., 5.11., 24.11. und 3.12.2026</p>
       </div>
       <div class="card">
         <h3>Alpine Fernerkundung</h3>
@@ -368,9 +417,12 @@ va_body = hero(
         <p>Dreitägiger Praxiskurs in hochalpiner Umgebung.</p>
       </div>
       <div class="card">
-        <h3>Klimawandel sichtbar machen</h3>
-        <p>2. Oktober 2026</p>
-        <p>Geodaten als Werkzeug zur Visualisierung von Klimaveränderungen.</p>
+        <h3>Mobile Mapping mit SLAM-Technologie</h3>
+        <p>20. November 2026 · Inforama Rütti</p>
+      </div>
+      <div class="card">
+        <h3>3D-Objekte aus Bilddaten digital rekonstruieren</h3>
+        <p>8. Dezember 2026 · Inforama Rütti</p>
       </div>
     </div>
   </div>
@@ -435,9 +487,10 @@ ub_body = hero(
       </div>
       <div>
         <ul class="filelist">
-          <li><a href="https://www.berufsbildung-geomatik.ch/de/weiterbildung/kommission-fuer-qualitaetssicherung-qsk.html" target="_blank" rel="noopener">Prüfungsordnung Berufsprüfung Geomatiktechnik</a> <span>QSK</span></li>
-          <li><a href="https://www.berufsbildung-geomatik.ch/de/weiterbildung/kommission-fuer-qualitaetssicherung-qsk.html" target="_blank" rel="noopener">Wegleitung zur Prüfungsordnung</a> <span>QSK</span></li>
-          <li><a href="https://www.berufsbildung-geomatik.ch/de/weiterbildung/kommission-fuer-qualitaetssicherung-qsk.html" target="_blank" rel="noopener">Anmeldung Berufsprüfung (QSK)</a> <span>QSK</span></li>
+          <li><a href="https://www.berufsbildung-geomatik.ch/fileadmin/documents/Weiterbildung/QSK/PO_BP_Geomatiktechniker_d_genehmigt_20-05-2015.pdf" target="_blank" rel="noopener">Prüfungsordnung Berufsprüfung Geomatiktechnik</a> <span>PDF · QSK</span></li>
+          <li><a href="https://www.berufsbildung-geomatik.ch/fileadmin/documents/Weiterbildung/QSK/Wegleitung_Geomatiktechniker_d.pdf" target="_blank" rel="noopener">Wegleitung zur Prüfungsordnung</a> <span>PDF · QSK</span></li>
+          <li><a href="http://portal.tv-geo.ch/" target="_blank" rel="noopener">Anmeldung Berufsprüfung (QSK)</a> <span>Portal Trägerverein</span></li>
+          <li><a href="https://geo-education.ch/wp-content/uploads/2020/06/Antragsformular-fu%CC%88r-Gleichwertigkeit_D.pdf" target="_blank" rel="noopener">Antrag Gleichwertigkeit Module</a> <span>PDF · QSK</span></li>
           <li><a href="https://www.berufsbildung-geomatik.ch/de/weiterbildung/kommission-fuer-qualitaetssicherung-qsk.html" target="_blank" rel="noopener">Reglement Abschlussarbeit</a> <span>QSK</span></li>
         </ul>
       </div>
@@ -491,7 +544,7 @@ an_body = hero(
       <div class="card">
         <h3>Lehrgang Geomatiktechnik</h3>
         <p>Anmeldung für den gesamten Lehrgang inkl. Basismodule.</p>
-        <p class="note" style="font-size:.9rem">Basismodule 2026 sind ausgebucht – Anmeldungen werden auf die Warteliste aufgenommen.</p>
+        <p class="note" style="font-size:.9rem">Anmeldungen für die Basismodule 2027 sind ab sofort möglich – die Studienplätze sind beschränkt.</p>
         <a class="card__link" href="#formular">Zum Formular →</a>
       </div>
       <div class="card">
