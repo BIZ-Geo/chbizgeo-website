@@ -1,7 +1,8 @@
 # Inhalte pflegen (CSV)
 
 Beschreibungen, Preise, Kursangebot und Kalender der Website stehen in diesen vier Dateien.
-Nach einer Änderung wird die Site neu gebaut (`cd _source && ./build.sh`), danach committen und pushen.
+Nach einer Änderung committen und pushen (oder direkt auf GitHub bearbeiten) – die GitHub Action baut und veröffentlicht die Site.
+Lokal vorab prüfen: `cd _source && ./build.sh` (meldet fehlende Übersetzungen).
 
 | Datei | Inhalt | erscheint auf |
 |---|---|---|
@@ -55,6 +56,7 @@ Nach einer Änderung wird die Site neu gebaut (`cd _source && ./build.sh`), dana
 | `titel_*` | | |
 | `text_*` | | Beschreibung auf der Highlight-Kachel (optional) |
 
-**Vergangene Termine** werden beim Bauen automatisch ausgeblendet. Die Website zeigt also den Stand
-des letzten Builds – damit der Kalender aktuell bleibt, regelmässig neu bauen und pushen.
+**Vergangene Termine** werden beim Bauen automatisch ausgeblendet. Die Website wird jede Nacht
+und nach jedem Push auf `_source/` von einer GitHub Action neu gebaut – eine CSV-Änderung, die
+direkt auf GitHub bearbeitet und committet wird, ist nach wenigen Minuten live.
 «Aktuelle Kurse» (Weiterbildung) zeigt die nächsten drei Termine vom Typ `Kurs`.

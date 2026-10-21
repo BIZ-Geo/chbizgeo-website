@@ -2,7 +2,7 @@
 
 Statische, mehrsprachige Website für das **Bildungszentrum Geomatik Schweiz (BIZ Geo)**,
 Domain künftig **biz-geo.ch** (vormals geo-education.ch). Veröffentlichung über **GitHub Pages**
-aus der Repo-Wurzel. Remote: `BIZ-Geo/chbizgeo-website`.
+per GitHub Action (`.github/workflows/pages.yml`). Remote: `BIZ-Geo/chbizgeo-website`.
 
 ## WICHTIG: Quelle vs. Ausgabe
 
@@ -22,8 +22,13 @@ Dieses Repo enthält **zwei Ebenen**:
 cd _source
 ./build.sh            # baut nach temp und spiegelt index.html + de/ fr/ it/ an die Repo-Wurzel
 cd ..
-git add -A && git commit -m "Rebuild" && git push   # GitHub Pages deployt automatisch
+git add -A && git commit -m "Rebuild" && git push
 ```
+
+**Live geht, was die Action baut:** `.github/workflows/pages.yml` führt `build.sh` auf GitHub aus und
+veröffentlicht `index.html` + `de/ fr/ it/` als Pages-Artefakt – täglich (damit vergangene Termine
+verschwinden), bei jedem Push auf `_source/**` und manuell im Actions-Tab («Run workflow»).
+Der lokale Build dient zur Vorschau; die gebauten Ordner im Repo werden nicht mehr direkt ausgeliefert.
 
 `build.sh` baut in einen Temp-Ordner (via `BIZGEO_SITE`) und kopiert nur die veröffentlichten
 Teile an die Wurzel – es löscht nie das Repo. (Hintergrund: `build_regions.py` räumt sein
@@ -95,8 +100,8 @@ dann arbeitet Claude in GitHub Actions am Repo und öffnet PRs.
   (z. B. Spalte `region` für Termine/Kurse der Romandie bzw. des Tessins).
 - Downloads (Schulplanung, Teilnahmebedingungen) liegen noch auf geo-education.ch → vor dem
   Domainwechsel ins Repo holen.
-- Kalender aktuell halten: Website zeigt den Stand des letzten Builds (regelmässig bauen/pushen
-  oder per GitHub Action automatisieren).
+- Gebaute Ordner `de/ fr/ it/` + Wurzel-`index.html` aus dem Repo entfernen, sobald der
+  Actions-Deploy sich bewährt hat (werden nicht mehr ausgeliefert).
 - Livegang: `BASE`/hreflang auf biz-geo.ch; geprüfte Datenschutzerklärung (revidiertes DSG).
 
 ## Konventionen für Claude Code
