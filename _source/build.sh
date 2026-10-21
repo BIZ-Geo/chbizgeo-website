@@ -1,16 +1,11 @@
 #!/usr/bin/env bash
-# BIZ Geo – baut die Mehrregionen-Site aus _source/ und spiegelt die
-# veröffentlichten Teile (index.html + de/ fr/ it/) an die Repo-Wurzel.
-# Danach: git add -A && git commit -m "Rebuild" && git push
+# BIZ Geo – baut die Mehrregionen-Site aus _source/ nach _source/_site/
+# (index.html + de/ fr/ it/). Lokal = Vorschau; live geht, was die GitHub Action
+# (.github/workflows/pages.yml) in CI frisch baut und aus _source/_site/ veröffentlicht.
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"     # _source/
-REPO="$(cd "$HERE/.." && pwd)"            # Repo-Wurzel
-OUT="$(mktemp -d)"
+OUT="$HERE/_site"                         # wird bei jedem Build geleert (build_regions.py)
 echo "› Baue nach $OUT ..."
 BIZGEO_SITE="$OUT" python3 "$HERE/_build/build_regions.py"
-echo "› Spiegele Output an Repo-Wurzel ..."
-rm -rf "$REPO/de" "$REPO/fr" "$REPO/it"
-cp -r "$OUT/de" "$OUT/fr" "$OUT/it" "$REPO/"
-cp "$OUT/index.html" "$REPO/index.html"
-echo "✓ Fertig in $REPO"
-echo "  Nächster Schritt:  git add -A && git commit -m 'Rebuild' && git push"
+echo "✓ Fertig in $OUT"
+echo "  Vorschau:  python3 -m http.server 8765 --directory \"$OUT\""
