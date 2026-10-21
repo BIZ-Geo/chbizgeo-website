@@ -1,0 +1,519 @@
+/* ==========================================================================
+   BIZ Geo – Design System
+   Basis: BIZ-Geo Corporate Design, Farbdefinition Version 1.0 (Februar 2026)
+   ========================================================================== */
+
+:root {
+  /* --- Verbindliche CD-Farben (nicht verändern) --- */
+  --geo-navy:        #16202B; /* Primärfarbe – Deep Geo Navy */
+  --geo-greige:      #DCD9D2; /* Greige – Basismodule */
+  --geo-navy-2:      #2A3A4F; /* Secondary Navy – Wahlmodule, Kontur/Icons */
+  --geo-red:         #C23726; /* Logofarbe – ausschliesslich Logo */
+
+  /* --- Abgeleitete Systemwerte (neutral, kein CD-Farbeingriff) --- */
+  --paper:           #FFFFFF;
+  --ink:             var(--geo-navy);
+  --ink-muted:       #4A5666;
+  --on-dark:         #FFFFFF; /* Schriftfarbe auf blauem Grund: immer weiss */
+  --line:            rgba(22, 32, 43, .14);
+  --line-on-dark:    rgba(255, 255, 255, .22);
+
+  /* --- Typografie ---
+     Hausschrift: Segoe UI Regular. Segoe UI ist eine Microsoft-Systemschrift und
+     nur auf Windows verfügbar; die Fallback-Kette liefert auf macOS, iOS, Android
+     und Linux die jeweils nächstliegende humanistische Grotesk. Für ein einheit-
+     liches Bild auf allen Systemen kann "Selawik" (metrisch kompatibler Open-
+     Source-Ersatz für Segoe UI) als Webfont eingebunden werden.               */
+  --font: "Segoe UI", "Selawik", -apple-system, BlinkMacSystemFont, "Roboto",
+          "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --step--1: clamp(.82rem, .8rem + .1vw, .9rem);
+  --step-0:  clamp(1rem, .96rem + .2vw, 1.075rem);
+  --step-1:  clamp(1.2rem, 1.12rem + .4vw, 1.4rem);
+  --step-2:  clamp(1.5rem, 1.32rem + .8vw, 2rem);
+  --step-3:  clamp(1.9rem, 1.5rem + 1.8vw, 3rem);
+  --step-4:  clamp(2.3rem, 1.6rem + 3.2vw, 4.2rem);
+
+  /* --- Layout --- */
+  --wrap: 1200px;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --radius: 4px;
+  --header-h: 108px;
+}
+
+/* --------------------------------------------------------- Reset / Basis */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: var(--step-0);
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+h1, h2, h3, h4 { line-height: 1.15; margin: 0 0 .5em; font-weight: 700; letter-spacing: -.015em; }
+h1 { font-size: var(--step-4); }
+h2 { font-size: var(--step-3); }
+h3 { font-size: var(--step-1); }
+p { margin: 0 0 1em; }
+ul { margin: 0 0 1em; padding-left: 1.15em; }
+
+.wrap { width: min(var(--wrap), 100% - var(--gutter) * 2); margin-inline: auto; position: relative; z-index: 1; }
+.section { padding-block: clamp(3.5rem, 8vw, 7rem); position: relative; }
+.section--tight { padding-block: clamp(2.5rem, 5vw, 4rem); }
+.section--dark { background: var(--geo-navy); color: var(--on-dark); }
+.section--dark h2, .section--dark h3 { color: var(--on-dark); }
+.section--greige { background: var(--geo-greige); }
+.lead { font-size: var(--step-1); color: var(--ink-muted); max-width: 62ch; }
+.section--dark .lead { color: var(--on-dark); }
+
+/* --------------------------------------------------- Tiefenebene: Höhenlinien
+   Topografische Kurven als Signatur – bewusst NUR im Hero. In den übrigen
+   dunklen Abschnitten (z. B. Veranstaltungskalender) würden sie sich mit den
+   Trennlinien der Inhalte beissen, deshalb bleiben die ruhig einfarbig blau.
+   Reine Linien in Secondary Navy (CD: „grafische Elemente und Linien") auf
+   Deep Geo Navy – volle Deckung. Der Text liegt über z-index:1.            */
+.hero, .section--dark { position: relative; overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; inset: 0; z-index: 0;
+  background: url("contours.svg") center / cover no-repeat;
+  pointer-events: none;
+}
+/* Beim Laden zeichnen sich die Höhenlinien sanft von links ein – läuft einmal,
+   respektiert „Bewegung reduzieren". */
+@media (prefers-reduced-motion: no-preference) {
+  .hero::before { animation: contour-draw 1.6s cubic-bezier(.22, .61, .36, 1) both; }
+  @keyframes contour-draw {
+    from { clip-path: inset(0 100% 0 0); }
+    to   { clip-path: inset(0 0 0 0); }
+  }
+}
+
+.eyebrow {
+  font-size: var(--step--1); font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--geo-navy-2); margin-bottom: .9rem;
+  display: inline-flex; align-items: center; gap: .6rem;
+}
+/* Vermessungs-Fadenkreuz vor dem Label – kleiner Themenakzent */
+.eyebrow::before {
+  content: ""; width: 12px; height: 12px; flex: none;
+  background:
+    linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) center / 1.5px 100% no-repeat;
+  border: 1.5px solid currentColor; border-radius: 50%;
+  opacity: .9;
+}
+.section--dark .eyebrow { color: var(--on-dark); opacity: .75; }
+
+/* ---------------------------------------------- Regionen-Platzhalter-Banner
+   Für /fr und /it in Phase 1: kennzeichnet, dass noch deutsche Inhalte stehen. */
+.region-note {
+  background: var(--geo-navy-2); color: var(--on-dark);
+  text-align: center; font-size: .9rem; padding: .7rem 1rem; line-height: 1.4;
+}
+.region-note a { color: #fff; font-weight: 700; }
+
+/* ------------------------------------------------------------------ Logo */
+/* Grössenverhältnis wie im Briefkopf der CD-Vorlage: kräftige Bildmarke,
+   Wortmarke dreizeilig rechts daneben, optisch auf gleicher Höhe. */
+.logo { display: flex; align-items: center; gap: 1.15rem; text-decoration: none; }
+.logo__mark { width: 68px; height: 68px; flex: none; }
+.logo__type {
+  font-size: .8rem; font-weight: 700; letter-spacing: .17em;
+  text-transform: uppercase; line-height: 1.55; color: currentColor;
+}
+
+/* Im Footer bleibt die Marke etwas zurückhaltender */
+.footer .logo__mark { width: 54px; height: 54px; }
+.footer .logo__type { font-size: .72rem; letter-spacing: .15em; }
+
+/* ---------------------------------------------------------------- Header */
+/* Keine Trennlinie: Header und Hero sind beide Deep Geo Navy und sollen als
+   eine Fläche wirken. Sobald gescrollt wird, setzt sich der Header allein
+   durch einen weichen Schatten ab – sichtbar nur dort, wo es nötig ist. */
+.header {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--geo-navy); color: var(--on-dark);
+  transition: box-shadow .25s ease;
+}
+.header.is-scrolled { box-shadow: 0 6px 24px rgba(0, 0, 0, .45); }
+.header__inner {
+  min-height: var(--header-h);
+  display: flex; align-items: center; gap: 2rem;
+}
+.nav { margin-left: auto; }
+.nav > ul { display: flex; gap: 1.75rem; list-style: none; margin: 0; padding: 0; align-items: center; }
+.nav > ul > li { position: relative; }
+.nav a {
+  text-decoration: none; font-size: .95rem; font-weight: 500;
+  padding: .35rem 0; border-bottom: 2px solid transparent; display: block;
+}
+.nav > ul > li > a:hover, .nav a[aria-current="page"] { border-bottom-color: var(--on-dark); }
+
+/* ------------------------------------------------------------- Dropdowns */
+.has-sub > a { display: inline-block; }
+.sub-toggle {
+  background: none; border: 0; color: inherit; cursor: pointer;
+  padding: .2rem .25rem; margin-left: .1rem; line-height: 1; vertical-align: middle;
+}
+.sub-toggle::before {
+  content: ""; display: inline-block; width: .5rem; height: .5rem;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-1px, -1px); transition: transform .2s ease;
+}
+.has-sub[data-open="true"] .sub-toggle::before { transform: rotate(-135deg) translate(-1px, -1px); }
+
+.submenu {
+  list-style: none; margin: 0; padding: .5rem;
+  position: absolute; top: calc(100% + .55rem); left: -.5rem; z-index: 60;
+  min-width: 250px; background: var(--geo-navy-2);
+  border-radius: var(--radius); box-shadow: 0 12px 32px rgba(0, 0, 0, .45);
+  opacity: 0; visibility: hidden; transform: translateY(-6px);
+  transition: opacity .16s ease, transform .16s ease, visibility .16s;
+}
+/* Öffnen per Hover (Maus) und per Klick/Tastatur (data-open) */
+.has-sub:hover .submenu,
+.has-sub:focus-within .submenu,
+.has-sub[data-open="true"] .submenu {
+  opacity: 1; visibility: visible; transform: translateY(0);
+}
+/* unsichtbare Brücke, damit der Hover zwischen Titel und Menü nicht abreisst */
+.submenu::before { content: ""; position: absolute; top: -.6rem; left: 0; right: 0; height: .6rem; }
+.submenu li { margin: 0; }
+.submenu a {
+  padding: .55rem .75rem; border-radius: var(--radius); border-bottom: 0;
+  font-weight: 500; white-space: nowrap; color: var(--on-dark);
+}
+.submenu a:hover { background: var(--geo-navy); border-bottom: 0; }
+
+/* Sprachumschalter – vorbereitet für DE / FR / IT (+EN) */
+.langs { display: flex; gap: .1rem; align-items: center; }
+.langs a {
+  text-decoration: none; font-size: .78rem; font-weight: 700; letter-spacing: .06em;
+  padding: .3rem .5rem; opacity: .55; border-radius: var(--radius);
+}
+.langs a:hover { opacity: 1; }
+.langs a[aria-current="true"] { opacity: 1; background: var(--geo-navy-2); }
+
+.burger {
+  display: none; background: none; border: 0; color: inherit;
+  font-size: 1.6rem; cursor: pointer; padding: .25rem .5rem; line-height: 1;
+}
+
+/* ----------------------------------------------------------------- Hero */
+.hero { background: var(--geo-navy); color: var(--on-dark); padding-block: clamp(4rem, 10vw, 8rem); }
+.hero h1 { color: var(--on-dark); max-width: 18ch; }
+.hero__claim { font-size: var(--step-1); max-width: 52ch; color: var(--on-dark); }
+.hero__actions { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: 2rem; }
+
+/* Scroll-Hinweis: macht sichtbar, dass es unter dem Hero weitergeht */
+.scroll-cue {
+  display: inline-flex; flex-direction: column; align-items: center; gap: .3rem;
+  margin-top: 2.5rem; color: var(--on-dark); text-decoration: none;
+  font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; opacity: .85;
+}
+.scroll-cue:hover { opacity: 1; }
+.scroll-cue svg { animation: cue-bounce 1.8s ease-in-out infinite; }
+@keyframes cue-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+@media (prefers-reduced-motion: reduce) { .scroll-cue svg { animation: none; } }
+
+/* Highlights-Kopf: Titel links, Link rechts */
+.highlights-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.highlights-head h2 { margin: 0; }
+
+/* Ganze Karte als Link */
+a.card { text-decoration: none; color: inherit; }
+
+/* -------------------------------------------------------------- Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .85rem 1.6rem; border-radius: var(--radius);
+  font-weight: 600; font-size: .95rem; text-decoration: none;
+  border: 2px solid transparent; cursor: pointer; transition: .16s ease;
+}
+/* Standard weiss/deckend; Greige erscheint als Akzent erst bei Interaktion. */
+.btn--primary { background: #fff; color: var(--geo-navy); }
+.btn--primary:hover { background: var(--geo-greige); box-shadow: 0 8px 20px rgba(0, 0, 0, .22); }
+.btn--ghost { border-color: var(--on-dark); color: var(--on-dark); }
+.btn--ghost:hover { background: var(--geo-greige); border-color: var(--geo-greige); color: var(--geo-navy); }
+.btn--solid { background: var(--geo-navy); color: var(--on-dark); }
+.btn--solid:hover { background: var(--geo-navy-2); }
+.btn--outline { border-color: var(--geo-navy-2); color: var(--geo-navy-2); }
+.btn--outline:hover { background: var(--geo-navy-2); color: var(--on-dark); }
+
+/* ----------------------------------------------------------------- Grid */
+.grid { display: grid; gap: 1.5rem; }
+.grid--2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.grid--3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grid--4 { grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); }
+
+/* --------------------------------------- Eyecatcher (CD-Regel verbindlich)
+   Basismodule    : BG #DCD9D2 / Icon+Kontur #2A3A4F
+   Wahlmodule etc.: BG #2A3A4F / Icon+Kontur #DCD9D2
+   Die Eyecatcher-Grafiken sind Originalassets (Ordner assets/eyecatcher) und
+   bringen die Flächenfarbe bereits mit; die Kachel führt sie nahtlos weiter. */
+.module {
+  display: flex; flex-direction: column;
+  border-radius: var(--radius); overflow: hidden;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(22, 32, 43, .08), 0 12px 26px rgba(22, 32, 43, .10);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.module:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 14px rgba(22, 32, 43, .12), 0 22px 44px rgba(22, 32, 43, .20);
+}
+
+/* ---------------------------------------------------- Modul-Detailseite
+   Themen-Banner: ganzer Kopf in der Modulfarbe, der Eyecatcher verschmilzt mit
+   der Fläche (seine eigene Hintergrundfarbe entspricht der Bannerfarbe). */
+.modul-banner { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
+.modul-banner--basis { background: var(--geo-greige); color: var(--geo-navy); }
+.modul-banner--wahl  { background: var(--geo-navy-2);  color: #fff; }
+.modul-banner__inner { display: grid; grid-template-columns: 1.25fr .75fr; gap: clamp(1.5rem, 5vw, 3.5rem); align-items: center; }
+.modul-banner h1 { font-size: var(--step-3); margin: .2rem 0 .55rem; color: inherit; }
+.modul-banner .lead { color: inherit; opacity: .85; margin: 0 0 1.6rem; max-width: 46ch; }
+.modul-banner .breadcrumb { color: inherit; opacity: .7; }
+.modul-banner .breadcrumb a { color: inherit; }
+.modul-banner--basis .eyebrow { color: var(--geo-navy-2); }
+.modul-banner--wahl .eyebrow { color: #fff; opacity: .85; }
+.modul-banner__art { justify-self: end; width: 100%; max-width: 320px; }
+.modul-banner__art img { width: 100%; height: auto; display: block; }
+@media (max-width: 760px) {
+  .modul-banner__inner { grid-template-columns: 1fr; }
+  .modul-banner__art { max-width: 240px; justify-self: start; order: -1; }
+}
+
+.mfacts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px;
+  background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.mfact { background: var(--paper); padding: 1.25rem 1.4rem; }
+.mfact__label { display: block; font-size: var(--step--1); color: var(--ink-muted); letter-spacing: .04em; }
+.mfact__value { display: block; font-size: 1.4rem; margin-top: .2rem; color: var(--geo-navy); }
+
+.ul-check { list-style: none; padding: 0; display: grid; gap: .8rem; max-width: 68ch; }
+.ul-check li { position: relative; padding-left: 2.1rem; }
+/* Sauberes, exakt zentriertes SVG-Häkchen im Kreis */
+.ul-check li::before {
+  content: ""; position: absolute; left: 0; top: .1em; width: 1.4rem; height: 1.4rem;
+  border-radius: 50%; background-color: var(--geo-navy-2);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center; background-size: .95rem;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: .6rem; }
+.chip { display: inline-block; padding: .5rem .95rem; border: 1px solid var(--geo-navy-2);
+  color: var(--geo-navy-2); border-radius: 100px; font-size: .92rem; font-weight: 600; }
+
+/* Das Motiv steht kleiner und mittig auf der Kachel und bekommt ringsum Luft
+   in derselben Farbe. Weil die Eyecatcher-Grafik ihre Flächenfarbe selbst
+   mitbringt, gehen Bild und Kachelfläche nahtlos ineinander über – es bleibt
+   keine sichtbare Bildkante und das Motiv wird nicht angeschnitten.        */
+.module__icon { display: block; width: 72%; height: auto; margin: 13% auto 9%; }
+.module__body { display: flex; flex-direction: column; gap: .3rem; padding: 0 1.3rem 1.5rem; flex: 1; }
+.module__code { font-size: var(--step--1); font-weight: 700; letter-spacing: .12em; opacity: .8; }
+.module__title { font-size: 1.05rem; font-weight: 700; line-height: 1.2; }
+.module__meta { font-size: var(--step--1); opacity: .75; margin-top: auto; padding-top: .7rem; }
+
+/* Basismodul: Greige-Fläche, Icon und Text in Secondary Navy (CD-Regel) */
+.module--basis { background: var(--geo-greige); color: var(--geo-navy-2); }
+
+/* Wahlmodul und weitere Kurse: Secondary-Navy-Fläche, Icon in Greige (CD-Regel),
+   Text weiss (Hausregel: Schrift auf blauem Grund immer weiss) */
+.module--wahl { background: var(--geo-navy-2); color: var(--on-dark); }
+
+/* ---------------------------------------------------------------- Cards */
+.card {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 1.75rem;
+  display: flex; flex-direction: column;
+  box-shadow: 0 1px 3px rgba(22, 32, 43, .06), 0 10px 24px rgba(22, 32, 43, .08);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(22, 32, 43, .10), 0 20px 40px rgba(22, 32, 43, .16);
+}
+.section--dark .card, .section--greige .card { background: var(--paper); border-color: transparent; }
+
+/* Ton-in-Ton-Karte für dunkle Flächen: Secondary Navy, ohne Kontur, Schrift weiss */
+.section--dark .card--tone {
+  background: var(--geo-navy-2); border: 0; box-shadow: none; color: var(--on-dark);
+}
+.section--dark .card--tone h3, .section--dark .card--tone p { color: var(--on-dark); }
+.section--dark .card--tone:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(0, 0, 0, .3); }
+/* Partner-Hinweis unten in der Kachel – Überschriften bleiben so oben bündig */
+.card__tag { margin-top: auto; align-self: flex-start; }
+.card--tone .card__tag { border-color: #fff; color: #fff; }
+.card h3 { margin-bottom: .35rem; }
+.card p { color: var(--ink-muted); font-size: .96rem; }
+.card__link { margin-top: auto; font-weight: 600; text-decoration: none; color: var(--geo-navy-2); }
+.card__link:hover { text-decoration: underline; }
+
+/* -------------------------------------------------------- Veranstaltungen */
+.events { list-style: none; margin: 0; padding: 0; }
+.events li {
+  display: grid; grid-template-columns: 88px 1fr auto; gap: 1.5rem; align-items: center;
+  padding: 1.15rem 0; border-top: 1px solid var(--line-on-dark);
+}
+.events li:last-child { border-bottom: 1px solid var(--line-on-dark); }
+.event__date {
+  text-align: center; background: var(--geo-navy-2); border-radius: var(--radius);
+  padding: .5rem .25rem; line-height: 1.1;
+}
+.event__date b { display: block; font-size: 1.45rem; color: var(--on-dark); }
+.event__date span { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; opacity: .8; }
+.event__title { font-weight: 600; color: var(--on-dark); }
+.event__meta { font-size: var(--step--1); color: var(--on-dark); opacity: .75; }
+.event__tag {
+  font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: .3rem .65rem; border: 1px solid var(--line-on-dark); border-radius: 100px; white-space: nowrap;
+}
+
+/* -------------------------------------------------------------- Zielgruppen */
+.audience {
+  border-top: 3px solid var(--geo-navy-2); padding-top: 1.25rem;
+}
+.audience h3 { font-size: 1.05rem; }
+.audience p { font-size: .94rem; color: var(--ink-muted); }
+
+/* ------------------------------------------------------------------ Steps */
+.steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 1.25rem; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 46px 1fr; gap: 1.1rem; align-items: start; }
+.steps li::before {
+  content: counter(s); width: 46px; height: 46px; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 700;
+  background: var(--geo-navy-2); color: #fff;
+}
+/* Auf dunklem Grund bleibt das Ziffernfeld als Greige-Fläche ein Akzent */
+.section--dark .steps li::before { background: var(--geo-greige); color: var(--geo-navy-2); }
+
+/* ------------------------------------------------------------------ Facts */
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 2rem; }
+.fact b { display: block; font-size: var(--step-3); color: var(--on-dark); line-height: 1; }
+.fact span { font-size: var(--step--1); opacity: .75; }
+
+/* Kennzahlen als schwebendes Panel: schiebt sich leicht über die Sektion
+   darüber und darunter und wirft einen Schatten – erzeugt eine echte Ebene
+   statt eines flachen Farbstreifens. */
+.factbar { background: transparent; padding-block: 0; margin-block: clamp(-2.5rem, -4vw, -3.5rem); z-index: 3; }
+.factbar__panel {
+  background: var(--geo-navy-2); color: var(--on-dark);
+  border-radius: var(--radius); padding: clamp(1.75rem, 4vw, 2.75rem) clamp(1.5rem, 4vw, 3rem);
+  box-shadow: 0 18px 44px rgba(22, 32, 43, .28);
+}
+.factbar__panel .fact b { position: relative; }
+
+/* ------------------------------------------------------------------- CTA */
+.cta {
+  background: var(--geo-navy-2); color: var(--on-dark);
+  border-radius: var(--radius); padding: clamp(2rem, 5vw, 3.5rem);
+  display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; justify-content: space-between;
+}
+.cta h2 { margin: 0; font-size: var(--step-2); color: var(--on-dark); }
+
+/* ---------------------------------------------------------------- Footer */
+.footer { background: var(--geo-navy); color: var(--on-dark); padding-block: 4rem 2rem; }
+.footer a { text-decoration: none; opacity: .8; }
+.footer a:hover { opacity: 1; text-decoration: underline; }
+.footer h4 { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; opacity: .6; margin-bottom: 1rem; }
+.footer ul { list-style: none; padding: 0; }
+.footer li { margin-bottom: .45rem; font-size: .94rem; }
+.footer__bottom {
+  margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line-on-dark);
+  display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between;
+  font-size: var(--step--1); opacity: .7;
+}
+
+/* ------------------------------------------------------------- Utilities */
+.breadcrumb { font-size: var(--step--1); opacity: .7; margin-bottom: 1rem; }
+.breadcrumb a { text-decoration: none; }
+.note {
+  border-left: 3px solid var(--geo-navy-2); padding: .9rem 1.15rem;
+  background: var(--geo-greige); font-size: .95rem; border-radius: 0 var(--radius) var(--radius) 0;
+}
+.filelist { list-style: none; padding: 0; }
+.filelist li { border-bottom: 1px solid var(--line); padding: .8rem 0; font-size: .95rem; }
+.filelist a { text-decoration: none; font-weight: 600; }
+.filelist a:hover { text-decoration: underline; }
+.filelist span { opacity: .6; font-size: .85rem; }
+.mt-2 { margin-top: 2rem; } .mb-3 { margin-bottom: 3rem; }
+.center { text-align: center; margin-inline: auto; }
+
+/* ------------------------------------------------------------------ Mobile */
+@media (max-width: 900px) {
+  .burger { display: block; margin-left: auto; }
+  .nav {
+    display: none; position: absolute; top: var(--header-h); left: 0; right: 0;
+    background: var(--geo-navy-2); padding: 1rem var(--gutter) 1.5rem;
+    max-height: calc(100vh - var(--header-h)); overflow-y: auto;
+  }
+  .nav.is-open { display: block; }
+  .nav > ul { flex-direction: column; gap: .25rem; align-items: stretch; }
+  .nav a { padding: .7rem 0; }
+
+  /* Dropdown wird im Burgermenü zum aufklappbaren Inline-Block */
+  .has-sub { display: flex; flex-wrap: wrap; align-items: center; }
+  .has-sub > a { flex: 1; }
+  .sub-toggle { padding: .7rem .5rem; }
+  .submenu {
+    position: static; opacity: 1; visibility: hidden; transform: none;
+    box-shadow: none; background: transparent; width: 100%;
+    min-width: 0; padding: 0 0 .5rem .75rem; max-height: 0; overflow: hidden;
+    transition: max-height .22s ease, visibility .22s;
+  }
+  .has-sub[data-open="true"] .submenu { visibility: visible; max-height: 30rem; }
+  /* auf Touch kein Hover-Öffnen */
+  .has-sub:hover .submenu, .has-sub:focus-within .submenu { max-height: 0; }
+  .has-sub[data-open="true"]:hover .submenu,
+  .has-sub[data-open="true"]:focus-within .submenu { max-height: 30rem; }
+  .submenu::before { display: none; }
+  .submenu a { padding: .5rem .5rem; }
+
+  .header__inner { position: relative; gap: 1rem; }
+  .events li { grid-template-columns: 68px 1fr; }
+  .event__tag { grid-column: 2; justify-self: start; }
+}
+
+/* ------------------------------------------------- Scroll-Bewegung
+   Sanftes Einblenden beim Erreichen des Sichtfelds. Elemente starten leicht
+   nach unten versetzt und leicht transparent, .in-view hebt das auf.
+   Der Effekt greift nur, wenn JS ihn aktiviert (Klasse .anim am <html>), und
+   wird bei „Bewegung reduzieren" komplett abgeschaltet.                     */
+.anim [data-reveal] {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity .6s ease, transform .6s cubic-bezier(.22, .61, .36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+  will-change: opacity, transform;
+}
+.anim [data-reveal].in-view { opacity: 1; transform: none; }
+
+/* Kacheln und Karten dürfen versetzt nacheinander erscheinen (Stagger) */
+.anim [data-reveal-group] > * {
+  opacity: 0; transform: translateY(26px);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.22, .61, .36, 1);
+}
+.anim [data-reveal-group].in-view > * { opacity: 1; transform: none; }
+.anim [data-reveal-group].in-view > *:nth-child(2) { transition-delay: .06s; }
+.anim [data-reveal-group].in-view > *:nth-child(3) { transition-delay: .12s; }
+.anim [data-reveal-group].in-view > *:nth-child(4) { transition-delay: .18s; }
+.anim [data-reveal-group].in-view > *:nth-child(5) { transition-delay: .24s; }
+.anim [data-reveal-group].in-view > *:nth-child(6) { transition-delay: .30s; }
+.anim [data-reveal-group].in-view > *:nth-child(7) { transition-delay: .36s; }
+.anim [data-reveal-group].in-view > *:nth-child(8) { transition-delay: .42s; }
+
+/* Hero: Inhalt schwebt beim Scrollen leicht mit und blendet aus.
+   Wert kommt per JS über --hero-shift / --hero-fade. */
+.anim .hero__inner {
+  transform: translateY(var(--hero-shift, 0));
+  opacity: var(--hero-fade, 1);
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim [data-reveal],
+  .anim [data-reveal-group] > * { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .anim .hero__inner { transform: none !important; opacity: 1 !important; }
+}

@@ -1,0 +1,6 @@
+.DS_Store
+__pycache__/
+_source/.__wtest
+
+# Logo-Rohdaten (.ai/.svg) – nicht veröffentlichen
+Neue Logos/

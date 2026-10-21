@@ -1,0 +1,125 @@
+/* ==========================================================================
+   BIZ Geo – Layout-Varianten für die Modulkacheln
+   Ergänzt styles.css. Alle Varianten halten die CD-Regeln ein:
+   Basismodule  = Fläche #DCD9D2, Motiv #2A3A4F
+   Wahlmodule   = Fläche #2A3A4F, Motiv #DCD9D2, Schrift weiss
+   ========================================================================== */
+
+/* ==================== Variante E – Grosse Fläche, Motiv zentriert (Favorit)
+   Format und Textführung wie Variante B, aber ohne Beschnitt: die Kachel ist
+   vollflächig in der Modulfarbe, das Motiv steht kleiner und mittig darin und
+   bekommt ringsum Luft in derselben Farbe. Da die Eyecatcher-Grafik die
+   Flächenfarbe selbst mitbringt, gehen Bild und Kachelfläche nahtlos
+   ineinander über – es ist keine Bildkante sichtbar.                        */
+.mod-e {
+  display: flex; flex-direction: column;
+  aspect-ratio: 3 / 4; border-radius: var(--radius); overflow: hidden;
+  text-decoration: none; transition: transform .18s ease;
+}
+.mod-e:hover { transform: translateY(-4px); }
+.mod-e__fig { flex: 1; display: grid; place-items: center; padding: 14%; }
+.mod-e__fig img { width: 100%; height: auto; display: block; }
+.mod-e__txt { padding: 0 1.25rem 1.4rem; }
+.mod-e__code { display: block; font-size: .72rem; font-weight: 700; letter-spacing: .12em; opacity: .8; margin-bottom: .15rem; }
+.mod-e__title { display: block; font-size: 1.05rem; font-weight: 700; line-height: 1.2; }
+.mod-e--basis { background: var(--geo-greige); color: var(--geo-navy-2); }
+.mod-e--wahl  { background: var(--geo-navy-2);  color: #fff; }
+
+/* Feinabstufungen des Innenabstands zum Vergleich */
+.mod-e--luft-klein .mod-e__fig { padding: 9%; }
+.mod-e--luft-gross .mod-e__fig { padding: 20%; }
+
+.variant-head {
+  border-top: 3px solid var(--geo-navy-2);
+  padding-top: 1.25rem; margin-bottom: 2rem;
+}
+.variant-head h2 { font-size: var(--step-2); margin-bottom: .25rem; }
+.variant-head p { color: var(--ink-muted); max-width: 70ch; margin: 0; }
+.section--dark .variant-head { border-color: var(--geo-greige); }
+.section--dark .variant-head p { color: rgba(255,255,255,.8); }
+.variant-tag {
+  display: inline-block; font-size: .7rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; background: var(--geo-navy-2); color: #fff;
+  padding: .3rem .7rem; border-radius: 100px; margin-bottom: .8rem;
+}
+.section--dark .variant-tag { background: var(--geo-greige); color: var(--geo-navy-2); }
+
+/* ============================================ Variante A – Kompakte Zeile
+   Icon klein und quadratisch links, Text rechts. Ruhig, dicht, sehr gut
+   lesbar bei 13 Einträgen. Die Farbfläche wird zum Marker statt zum Bild.  */
+.mod-a {
+  display: flex; align-items: stretch; gap: 0;
+  border-radius: var(--radius); overflow: hidden;
+  text-decoration: none; background: var(--paper);
+  border: 1px solid var(--line);
+  transition: border-color .16s ease, transform .16s ease;
+}
+.mod-a:hover { transform: translateX(3px); border-color: var(--geo-navy-2); }
+.mod-a img { width: 84px; height: 84px; flex: none; object-fit: cover; }
+.mod-a__txt { padding: .9rem 1.1rem; display: flex; flex-direction: column; justify-content: center; }
+.mod-a__code { font-size: .72rem; font-weight: 700; letter-spacing: .12em; color: var(--geo-navy-2); }
+.mod-a__title { font-weight: 700; line-height: 1.2; color: var(--ink); }
+
+/* ================================== Variante B – Grosse Fläche mit Beschnitt
+   Motiv formatfüllend und angeschnitten, Text im unteren Drittel auf der
+   Fläche. Plakativ, hohe Wiedererkennung, wenig Leerraum.                  */
+.mod-b {
+  position: relative; display: block; text-decoration: none;
+  border-radius: var(--radius); overflow: hidden;
+  aspect-ratio: 3 / 4; transition: transform .18s ease;
+}
+.mod-b:hover { transform: translateY(-4px); }
+.mod-b img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; transform: scale(1.35); transform-origin: 50% 32%;
+}
+.mod-b__txt { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.1rem 1.2rem 1.3rem; }
+.mod-b__code { display: block; font-size: .72rem; font-weight: 700; letter-spacing: .12em; margin-bottom: .15rem; }
+.mod-b__title { display: block; font-size: 1.05rem; font-weight: 700; line-height: 1.2; }
+.mod-b--basis .mod-b__txt {
+  background: linear-gradient(to top, var(--geo-greige) 62%, rgba(220,217,210,0));
+  color: var(--geo-navy-2);
+}
+.mod-b--wahl .mod-b__txt {
+  background: linear-gradient(to top, var(--geo-navy-2) 62%, rgba(42,58,79,0));
+  color: #fff;
+}
+
+/* ================================ Variante C – Kachel auf dunkler Sektion
+   Gleiche Kachel wie bisher, aber die Sektion liegt auf Deep Geo Navy.
+   Die Greige-Flächen bekommen dadurch Halt und wirken als Fläche, nicht
+   als heller Fleck auf Weiss.                                             */
+.mod-c {
+  display: flex; flex-direction: column; text-decoration: none;
+  border-radius: var(--radius); overflow: hidden; transition: transform .16s ease;
+}
+.mod-c:hover { transform: translateY(-4px); }
+.mod-c img { width: 100%; aspect-ratio: 1; object-fit: cover; transform: scale(1.18); }
+.mod-c__txt { padding: 1rem 1.2rem 1.3rem; }
+.mod-c__code { display: block; font-size: .72rem; font-weight: 700; letter-spacing: .12em; opacity: .8; }
+.mod-c__title { display: block; font-weight: 700; line-height: 1.2; }
+.mod-c--basis { background: var(--geo-greige); color: var(--geo-navy-2); }
+.mod-c--wahl  { background: var(--geo-navy-2);  color: #fff; }
+
+/* ========================== Variante D – Zwei Blöcke als geschlossene Wand
+   Alle Basismodule bilden eine zusammenhängende Greige-Fläche, alle
+   Wahlmodule eine Navy-Fläche. Kein Weissraum zwischen den Kacheln – die
+   Module lesen sich als Einheit statt als 13 Einzelteile.                 */
+.mod-d-wall {
+  display: grid; gap: 1px; border-radius: var(--radius); overflow: hidden;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+.mod-d-wall--basis { background: var(--geo-navy-2); }  /* Fugenfarbe */
+.mod-d-wall--wahl  { background: var(--geo-greige); }
+.mod-d { display: flex; flex-direction: column; text-decoration: none; transition: filter .16s ease; }
+.mod-d:hover { filter: brightness(1.06); }
+.mod-d img { width: 100%; aspect-ratio: 1; object-fit: cover; transform: scale(1.22); }
+.mod-d__txt { padding: .95rem 1.1rem 1.2rem; }
+.mod-d__code { display: block; font-size: .7rem; font-weight: 700; letter-spacing: .12em; opacity: .8; }
+.mod-d__title { display: block; font-weight: 700; line-height: 1.2; font-size: .98rem; }
+.mod-d--basis { background: var(--geo-greige); color: var(--geo-navy-2); }
+.mod-d--wahl  { background: var(--geo-navy-2);  color: #fff; }
+
+@media (max-width: 640px) {
+  .mod-b { aspect-ratio: 1; }
+}
