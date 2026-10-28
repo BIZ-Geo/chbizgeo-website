@@ -2,9 +2,12 @@
 """Erzeugt eine Detailseite pro Modul: modul-<key>.html
 
 Vorlage + Daten getrennt: die Moduldaten (Beschreibung, Kompetenzen,
-Voraussetzungen, Kurse, Lektionen, Kosten) stehen in _source/daten/module.csv.
+Voraussetzungen, Kurse, Lektionen, Kosten) stehen je Sprachregion in
+_source/daten/<region>/module.csv.
 """
 import html as _html, pathlib
+import daten
+from daten import t
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 index = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -101,7 +104,7 @@ def page(key, m):
     <div class="modul-banner__inner">
       <div>
         <p class="eyebrow">{cat}</p>
-        <h1>Modul {code} – {esc(m['title'])}</h1>
+        <h1>{t('modul')} {code} – {esc(m['title'])}</h1>
         <p class="lead">{esc(lead)}</p>
         <div class="hero__actions">
           <a class="btn {bp}" href="anmeldung.html">Kursdaten &amp; Anmeldung</a>
@@ -109,7 +112,7 @@ def page(key, m):
         </div>
       </div>
       <div class="modul-banner__art">
-        <img src="assets/eyecatcher/{ey}.png" alt="Eyecatcher Modul {code} – {esc(m['title'])}">
+        <img src="assets/eyecatcher/{ey}.png" alt="{t('eyecatcher_modul')} {code} – {esc(m['title'])}">
       </div>
     </div>
   </div>
@@ -136,20 +139,17 @@ def page(key, m):
 </section>
 """.replace("{code}", code)
 
-    doc = (HEAD.format(title=f"Modul {code} – {m['title']}",
-                       desc=f"Modul {code} {m['title']} – {cat} im Lehrgang Geomatiktechnik bei BIZ Geo.")
+    im = t("basismodul_im") if kind == "basis" else t("wahlmodul_im")
+    doc = (HEAD.format(title=esc(f"{t('modul')} {code} – {m['title']}"),
+                       desc=esc(f"{t('modul')} {code} {m['title']} – {im}"))
            + HEADER + body + FOOTER + TAIL)
     (ROOT / f"modul-{key}.html").write_text(doc, encoding="utf-8")
     return f"modul-{key}.html"
 
 
 # ------------------------------------------------------------------ Moduldaten
-# Quelle: _source/daten/module.csv (FR/IT kommen über translate_data.py dazu)
-from daten import module as _module
-
-MODULES = {key: {**m, "lead": m["lead"]["de"], "outcomes": m["outcomes"]["de"],
-                 "voraussetzungen": m["voraussetzungen"]["de"], "kurse": m["kurse"]["de"]}
-           for key, m in _module().items()}
+# Quelle: _source/daten/<region>/module.csv (Region über BIZGEO_REGION)
+MODULES = daten.module()
 
 if __name__ == "__main__":
     for key, m in MODULES.items():
