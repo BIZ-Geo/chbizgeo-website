@@ -359,6 +359,8 @@ a.card { text-decoration: none; color: inherit; }
   padding: 1.15rem 0; border-top: 1px solid var(--line-on-dark);
 }
 .events li:last-child { border-bottom: 1px solid var(--line-on-dark); }
+.events li.events__leer { display: block; }          /* Hinweis, wenn keine Termine eingetragen sind */
+.grid > .grid__leer { grid-column: 1 / -1; margin: 0; }
 .event__date {
   text-align: center; background: var(--geo-navy-2); border-radius: var(--radius);
   padding: .5rem .25rem; line-height: 1.1;

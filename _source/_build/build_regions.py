@@ -5,8 +5,9 @@ Phase 1 (Gerüst): DE trägt den aktuellen Inhalt; FR und IT sind Kopien mit
 klar gekennzeichnetem Platzhalter-Banner (noch deutsche Inhalte). Pro Seite:
 Sprach-Attribut, Sprach-Umschalter mit den richtigen Querverweisen, hreflang.
 
-Ergebnis: Ordner _site/ mit index.html (Einstieg) und de/ fr/ it/.
-Der Content wird später je Region aus XLSX/CSV gefüllt.
+Ergebnis: Ordner _site/ mit index.html (Einstieg) und de/ fr/ it/. Die Inhalte
+(Module, Kurse, Termine) kommen je Region aus _source/daten/<region>/*.csv; die
+festen Seitentexte werden für FR/IT über translate_data.py übersetzt.
 """
 import re, shutil, pathlib, subprocess, sys
 from translate_data import TRIPLES
@@ -84,9 +85,11 @@ def process(html, region, fname):
     return html
 
 
-def build_flat():
+def build_flat(region):
+    """Erzeugt die Quellseiten in _source/ mit den Inhalten aus daten/<region>/."""
+    env = {**_os.environ, "BIZGEO_REGION": region}
     for s in ["build.py", "build_modules.py", "build_index.py"]:
-        subprocess.run([sys.executable, str(ROOT / "_build" / s)], check=True, cwd=str(ROOT))
+        subprocess.run([sys.executable, str(ROOT / "_build" / s)], check=True, cwd=str(ROOT), env=env)
 
 
 ROOT_INDEX = """<!DOCTYPE html>
@@ -151,12 +154,14 @@ ROOT_INDEX = """<!DOCTYPE html>
 
 
 def main():
-    build_flat()
     if SITE.exists():
         shutil.rmtree(SITE)
     SITE.mkdir()
-    plist = pages()
-    for region, _, _ in REGIONS:
+    # Jede Region mit ihren eigenen Inhalten (daten/<region>/) bauen. DE zuletzt, damit die
+    # Quellseiten in _source/ (index.html, fachausweis.html, …) deutsch und unverändert bleiben.
+    for region in ("fr", "it", "de"):
+        build_flat(region)
+        plist = pages()
         rdir = SITE / region
         rdir.mkdir()
         shutil.copytree(ROOT / "assets", rdir / "assets")
@@ -167,7 +172,10 @@ def main():
     print("Struktur gebaut in", SITE.name)
     print("  Root: index.html (Einstieg)")
     for region, _, _ in REGIONS:
-        print(f"  /{region}/: {len(plist)} Seiten + assets")
+        inhalt = subprocess.run([sys.executable, "-c", "import daten; print(daten.zusammenfassung())"],
+                                cwd=str(ROOT / "_build"), env={**_os.environ, "BIZGEO_REGION": region},
+                                capture_output=True, text=True, check=True).stdout.strip()
+        print(f"  /{region}/: {len(plist)} Seiten + assets · {inhalt}")
 
     # Rest-Kontrolle: unübersetzte deutsche Text-Knoten in FR/IT?
     for region in ("fr", "it"):
@@ -184,16 +192,6 @@ def main():
                 print("      -", r)
         else:
             print(f"  ✓ /{region}/: keine deutschen Text-Knoten mehr gefunden")
-
-    # Fehlende FR/IT-Spalten in den CSV-Dateien (dort bleibt vorerst der deutsche Text stehen)
-    from daten import luecken
-    fehlend = luecken()
-    if fehlend:
-        print(f"  ⚠ CSV: {len(fehlend)} fehlende Übersetzungen:")
-        for f in fehlend[:30]:
-            print("      -", f)
-    else:
-        print("  ✓ CSV: alle FR/IT-Spalten ausgefüllt")
 
 
 if __name__ == "__main__":

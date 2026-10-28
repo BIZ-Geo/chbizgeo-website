@@ -8,12 +8,12 @@ Remote: `BIZ-Geo/chbizgeo-website`.
 ## WICHTIG: Quelle vs. Ausgabe
 
 - **`_source/`** – die **einzige Quelle**: deutsche Quellseiten, Build-Pipeline (`_build/`),
-  Übersetzungstabelle und die gepflegten Inhalte (`daten/*.csv`). Hier wird entwickelt.
+  Übersetzungstabelle und die gepflegten Inhalte je Sprachregion (`daten/<region>/*.csv`). Hier wird entwickelt.
 - **`_source/_site/`** – die **generierte Ausgabe** (`index.html` + `de/ fr/ it/`). Nicht im Repo
   (`.gitignore`), wird bei jedem Build geleert und neu geschrieben. **Niemals von Hand bearbeiten.**
 - Im Repo liegt **kein Build-Output** mehr; es gibt keine `de/ fr/ it/` und keine `index.html` an der Wurzel.
 
-> Faustregel: **Immer in `_source/` ändern** (Inhalte in `_source/daten/*.csv`), committen, pushen –
+> Faustregel: **Immer in `_source/` ändern** (Inhalte in `_source/daten/<region>/*.csv`), committen, pushen –
 > die Action baut und veröffentlicht.
 
 ## Bauen & Veröffentlichen
@@ -41,23 +41,27 @@ deshalb `BIZGEO_SITE` nie auf einen anderen Ordner (schon gar nicht die Repo-Wur
 
 | Skript | Zweck |
 |---|---|
-| `build_regions.py` | **Hauptskript.** Baut Root-Picker + `de/ fr/ it/` nach `_source/_site/`; ruft die drei folgenden auf, kopiert `assets/` je Region und übersetzt FR/IT. Meldet am Ende unübersetzte DE-Reste und fehlende CSV-Übersetzungen. |
-| `build.py` | Hauptseiten aus Inline-DE-HTML (fachausweis, weiterbildung, veranstaltungen, ueber-uns, anmeldung, kontakt, datenschutz); füllt ausserdem die `<!-- DATEN:… -->`-Bereiche der Quell-`index.html` (Module, Termine, Highlights). |
-| `build_modules.py` | 13 Modul-Detailseiten `modul-b1…s8.html` aus `daten/module.csv`. |
+| `build_regions.py` | **Hauptskript.** Baut Root-Picker + `de/ fr/ it/` nach `_source/_site/`. Für jede Region (fr, it, de – DE zuletzt) ruft es die drei folgenden mit `BIZGEO_REGION=<region>` auf, kopiert `assets/` und übersetzt die festen Seitentexte (FR/IT). Meldet je Region die Anzahl Module/Kurse/Termine und am Ende unübersetzte DE-Reste. |
+| `build.py` | Hauptseiten aus Inline-DE-HTML (fachausweis, weiterbildung, veranstaltungen, ueber-uns, anmeldung, kontakt, datenschutz); füllt ausserdem die `<!-- DATEN:… -->`-Bereiche der Quell-`index.html` (Module, Termine, Highlights) mit den Inhalten der Region. |
+| `build_modules.py` | 13 Modul-Detailseiten `modul-b1…s8.html` aus `daten/<region>/module.csv`. |
 | `build_index.py` | `assets/search-index.json` für den Frage-Bot. |
-| `daten.py` | Liest `_source/daten/*.csv`, formatiert Daten/Zeiten je Sprache, blendet vergangene Termine aus und liefert die FR/IT-Einträge der CSV-Inhalte an die Übersetzungstabelle. |
-| `translate_data.py` | **Übersetzungstabelle** `TRIPLES = [(DE, FR, IT), …]` für die festen Seitentexte; hängt am Ende die CSV-Übersetzungen an. |
+| `daten.py` | Liest `_source/daten/<region>/*.csv` (Region aus `BIZGEO_REGION`), formatiert Daten/Zeiten in der Sprache der Region, blendet vergangene Termine aus; enthält die Textbausteine (`TEXT`), die mit CSV-Inhalten kombiniert werden. |
+| `translate_data.py` | **Übersetzungstabelle** `TRIPLES = [(DE, FR, IT), …]` für die festen Seitentexte. |
 | `assemble_single.py` u. a. | Hilfsskripte (eingebettete Präsentationsdatei, Höhenlinien, Varianten). |
 
-## Inhalte aus CSV (`_source/daten/`)
+## Inhalte aus CSV (`_source/daten/<region>/`)
 
 Module (Beschreibungen, Kompetenzen, Voraussetzungen, Kurse, Lektionen, Preise), Fachgebiete,
-Kursangebot und Veranstaltungskalender werden **manuell in CSV-Dateien gepflegt** – Spalten und
-Format in **`_source/daten/README.md`**. Kurz: Semikolon, UTF-8, Spalten `…_de/_fr/_it`, Listen mit
-` | `, Datum `TT.MM.JJJJ`.
+Kursangebot und Veranstaltungskalender werden **manuell in CSV-Dateien gepflegt – je Sprachregion
+getrennt**: `daten/de/` (Deutschschweiz), `daten/fr/` (Romandie), `daten/it/` (Ticino), jeweils
+`module.csv`, `fachgebiete.csv`, `kursangebot.csv`, `veranstaltungen.csv`. Jede Datei ist **einsprachig**
+(Sprache der Region); die Spaltennamen sind überall gleich (deutsch). Spalten und Format in
+**`_source/daten/README.md`**. Kurz: Semikolon, UTF-8, Listen mit ` | `, Datum `TT.MM.JJJJ`.
 
+- Die Regionen sind vollständig getrennt: Inhalte aus `daten/fr/` erscheinen nur unter `/fr/` usw.
+  Es gibt keine Übersetzung der CSV-Inhalte zwischen den Regionen.
 - **Vergangene Termine** blendet der Build aus (Stichtag = Build-Datum, Zeitzone Europe/Zurich).
-- Fehlende FR/IT-Zellen meldet der Build («⚠ CSV: … fehlende Übersetzungen»); bis dahin erscheint DE.
+  Ohne kommende Termine zeigt die Seite einen Hinweis («Aktuell sind keine Termine eingetragen.»).
 - Die Bereiche zwischen `<!-- DATEN:x -->` und `<!-- /DATEN:x -->` in `_source/index.html` werden bei
   jedem Build überschrieben – dort nicht von Hand ändern.
 
@@ -66,7 +70,9 @@ Format in **`_source/daten/README.md`**. Kurz: Semikolon, UTF-8, Spalten `…_de
 - DE ist die Quelle. Übersetzt wird beim Bauen durch **randbündige Ersetzung** ganzer Textknoten
   (`>…<`) und der Attribute `alt/title/aria-label/content` – längste Schlüssel zuerst, damit z. B.
   „Basismodul" nie in „Basismodule" hineinragt.
-- **Inhalte aus CSV:** Übersetzung steht in den Spalten `…_fr/_it` derselben Zeile.
+- **Inhalte aus CSV** werden nicht übersetzt: jede Region hat ihre eigenen, einsprachigen Dateien.
+  Textbausteine, die mit CSV-Inhalten kombiniert werden (z. B. «Modul B1», «Kurs S8-26», Datumsformat),
+  stehen in `TEXT` bzw. den Formatfunktionen in `daten.py`.
 - **Neue feste Seitentexte (im Code) ⇒ Zeile `(DE, FR, IT)` in `_source/_build/translate_data.py` ergänzen.**
 - **Nicht übersetzt (bewusst):** BIZ Geo, QSK, FHNW, FME, GIS, BIM, XML, LFP3, LTOP, SIA, EFZ,
   Modulcodes (B1, S8-26), CHF-Beträge, Eigennamen/Adressen, Region-Namen im Root-Picker.
@@ -116,8 +122,10 @@ dann arbeitet Claude in GitHub Actions am Repo und öffnet PRs.
 ## Offene To-dos
 
 - Teamseite: Kernteam mit Fotos, Dozierende als Text.
-- Datenmodell: Unterscheidung je Region (z. B. Spalte `region` für Termine/Kurse der Romandie bzw.
-  des Tessins).
+- Romandie/Ticino: eigene Termine in `daten/fr|it/veranstaltungen.csv` eintragen; Module und
+  Kursangebot sind Übersetzungen der Deutschschweiz und von den Schulen zu prüfen/anzupassen.
+- Frage-Bot (`search-index.json`) wird je Region aus den noch nicht übersetzten Seiten gebaut
+  (feste Texte deutsch) – ggf. auf die übersetzten Seiten umstellen.
 - Downloads (Schulplanung, Teilnahmebedingungen) liegen noch auf geo-education.ch → vor dem
   Domainwechsel ins Repo holen.
 - Livegang: `BASE`/hreflang auf biz-geo.ch; geprüfte Datenschutzerklärung (revidiertes DSG).
@@ -125,7 +133,8 @@ dann arbeitet Claude in GitHub Actions am Repo und öffnet PRs.
 ## Konventionen für Claude Code
 
 1. Nur in `_source/` arbeiten – `_source/_site/` ist Build-Ausgabe und nicht im Repo.
-2. Inhalte (Module, Kurse, Termine, Preise) in `_source/daten/*.csv` ändern, nicht im Code. Neue feste
+2. Inhalte (Module, Kurse, Termine, Preise) in `_source/daten/<region>/*.csv` ändern, nicht im Code –
+   immer in der richtigen Region (de/fr/it) und in deren Sprache. Neue feste
    Seitentexte immer mit FR/IT in `translate_data.py` nachziehen.
 3. Vor dem PR `./build.sh` ausführen und Übersetzungscheck ansehen; veröffentlicht wird nach dem
    Merge automatisch durch die Action.

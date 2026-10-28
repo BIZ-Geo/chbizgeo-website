@@ -11,6 +11,7 @@ esc = lambda t: html.escape(t, quote=False)
 MODULE = daten.module()
 EVENTS = daten.veranstaltungen()
 HIGHLIGHTS = daten.highlights(EVENTS)
+KURSE = [e for e in EVENTS if e["typ"] == "Kurs"][:3]      # «Aktuelle Kurse» (Weiterbildung)
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 index = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -18,9 +19,9 @@ index = (ROOT / "index.html").read_text(encoding="utf-8")
 
 def home_module(kind):
     return "".join(f"""      <a class="module module--{kind}" href="modul-{k}.html">
-        <img class="module__icon" src="assets/eyecatcher/{m['code']}.png" alt="Eyecatcher Modul {m['code']} – {esc(m['title'])}" loading="lazy">
+        <img class="module__icon" src="assets/eyecatcher/{m['code']}.png" alt="{daten.t('eyecatcher_modul')} {m['code']} – {esc(m['title'])}" loading="lazy">
         <span class="module__body">
-          <span class="module__code">Modul {m['code']}</span>
+          <span class="module__code">{daten.t('modul')} {m['code']}</span>
           <span class="module__title">{esc(m['title'])}</span>
         </span>
       </a>
@@ -28,31 +29,34 @@ def home_module(kind):
 
 
 def home_termine():
-    mon = daten.MONATE_KURZ["de"]
+    mon = daten.MONATE_KURZ[daten.REGION]
+    termine = [e for e in EVENTS if e["startseite"]][:5]
+    if not termine:
+        return f'      <li class="events__leer">{esc(daten.t("keine_termine"))}</li>\n'
     return "".join(f"""      <li>
         <span class="event__date"><b>{e["von"].day:02}</b><span>{mon[e["von"].month - 1]}</span></span>
         <span>
-          <span class="event__title">{esc(e["titel"]["de"])}</span><br>
-          <span class="event__meta">{esc(e["meta"]["de"])}</span>
+          <span class="event__title">{esc(e["titel"])}</span><br>
+          <span class="event__meta">{esc(e["meta"])}</span>
         </span>
         <span class="event__tag">{e["typ"]}</span>
       </li>
-""" for e in [e for e in EVENTS if e["startseite"]][:5])
+""" for e in termine)
 
 
 def home_highlights():
     out = ""
     # Highlights mit startseite=ja zuerst, dann nach Datum; höchstens drei Kacheln
     for h in sorted(HIGHLIGHTS, key=lambda h: not h["startseite"])[:3]:
-        zeilen = [h["ort"]["de"], h["wann"]["de"]] if h["mehrfach"] else [h["wann"]["de"]]
-        zeilen.append(h["text"]["de"])
-        tag = (f'        <span class="event__tag card__tag">Partner · {esc(h["partner"])}</span>\n'
+        zeilen = [h["ort"], h["wann"]] if h["mehrfach"] else [h["wann"]]
+        zeilen.append(h["text"])
+        tag = (f'        <span class="event__tag card__tag">{daten.t("partner")} · {esc(h["partner"])}</span>\n'
                if h["partner"] else "")
         out += ('      <a class="card card--tone" href="veranstaltungen.html#highlights">\n'
-                f'        <h3>{esc(h["titel"]["de"])}</h3>\n'
+                f'        <h3>{esc(h["titel"])}</h3>\n'
                 + "".join(f"        <p>{esc(z)}</p>\n" for z in zeilen if z)
                 + tag + "      </a>\n")
-    return out
+    return out or f'      <p class="grid__leer">{esc(daten.t("keine_highlights"))}</p>\n'
 
 
 # Datengetriebene Bereiche der Startseite (zwischen <!-- DATEN:x --> und <!-- /DATEN:x -->) füllen
@@ -115,10 +119,10 @@ def module_card(kind, code, title, meta, anchor):
     (Basismodule Greige, Wahlmodule Secondary Navy); die Kachel führt sie fort.
     Die Unterschrift (meta) wird nur ausgegeben, wenn sie gesetzt ist.
     """
-    key = code.replace("Modul ", "")
+    key, code = code, f"{daten.t('modul')} {code}"
     meta_html = f'\n          <span class="module__meta">{meta}</span>' if meta else ""
     return f"""      <a class="module module--{kind}" id="{anchor}" href="modul-{key.lower()}.html">
-        <img class="module__icon" src="assets/eyecatcher/{key}.png" alt="Eyecatcher {code} – {title}" loading="lazy">
+        <img class="module__icon" src="assets/eyecatcher/{key}.png" alt="{daten.t('eyecatcher_modul')} {key} – {title}" loading="lazy">
         <span class="module__body">
           <span class="module__code">{code}</span>
           <span class="module__title">{title}</span>{meta_html}
@@ -168,7 +172,7 @@ fa_body = hero(
     <h2 style="font-size:var(--step-2)">Basismodule</h2>
     <p class="lead mb-3">Die gemeinsame Grundlage für alle Teilnehmenden.</p>
     <div class="grid grid--4">
-""" + "".join(module_card("basis", f"Modul {c}", t, "", a) for c, t, a in basis) + """
+""" + "".join(module_card("basis", c, t, "", a) for c, t, a in basis) + """
     </div>
   </div>
 </section>
@@ -182,7 +186,7 @@ fa_body = hero(
       auch einzeln als Weiterbildung buchbar.
     </p>
     <div class="grid grid--4">
-""" + "".join(module_card("wahl", f"Modul {c}", t, "", a) for c, t, a in wahl) + """
+""" + "".join(module_card("wahl", c, t, "", a) for c, t, a in wahl) + """
     </div>
     <p class="note mt-2">
       Wahlmodule ohne garantierte Durchführung finden vorbehaltlich einer ausreichenden Zahl
@@ -290,7 +294,7 @@ page("fachausweis.html", "Eidg. Fachausweis Geomatiktechnik",
 
 # -------------------------------------------------------------- WEITERBILDUNG
 # Fachgebiete und Kursangebot: _source/daten/fachgebiete.csv + kursangebot.csv
-fields = [(esc(f["titel"]["de"]), esc(f["beschreibung"]["de"]), [esc(k["de"]) for k in f["kurse"]])
+fields = [(esc(f["titel"]), esc(f["beschreibung"]), [esc(k) for k in f["kurse"]])
           for f in daten.fachgebiete()]
 
 wb_body = hero(
@@ -321,7 +325,7 @@ wb_body = hero(
     <h2 style="font-size:var(--step-2)">Aktuelle Kurse</h2>
     <div class="grid grid--3 mt-2">
 """ + "".join(f"""      <a class="module module--{kind}" href="anmeldung.html">
-        <img class="module__icon" src="assets/eyecatcher/{key}.png" alt="Eyecatcher {key} – {t}" loading="lazy">
+        <img class="module__icon" src="assets/eyecatcher/{key}.png" alt="{daten.t('eyecatcher')} {key} – {t}" loading="lazy">
         <span class="module__body">
           <span class="module__code">{code}</span>
           <span class="module__title">{t}</span>
@@ -330,10 +334,10 @@ wb_body = hero(
       </a>
 """ for key, kind, code, t, meta in [
     (e["modul"] or "S2", "basis" if (e["modul"] or "S").startswith("B") else "wahl",
-     f"Kurs {e['klasse']}" if e["klasse"] else "Einzelkurs", esc(e["titel"]["de"]),
-     esc(" · ".join(x for x in (e["datum_lang"]["de"], e["ort"]["de"]) if x)))
-    for e in [e for e in EVENTS if e["typ"] == "Kurs"][:3]
-]) + """
+     f"{daten.t('kurs')} {e['klasse']}" if e["klasse"] else daten.t("einzelkurs"), esc(e["titel"]),
+     esc(" · ".join(x for x in (e["datum_lang"], e["ort"]) if x)))
+    for e in KURSE
+]) + ("" if KURSE else f'      <p class="grid__leer">{esc(daten.t("keine_kurse"))}</p>\n') + """
     </div>
     <p class="note mt-2">
       Jeder Kurs trägt das Eyecatcher-Motiv seines Moduls – die Kachelfläche entspricht der
@@ -372,13 +376,15 @@ page("weiterbildung.html", "Weiterbildung und Einzelkurse",
 
 # ------------------------------------------------------------ VERANSTALTUNGEN
 # Termine: _source/daten/veranstaltungen.csv (vergangene werden beim Build ausgeblendet)
-MON = daten.MONATE_KURZ["de"]
+MON = daten.MONATE_KURZ[daten.REGION]
 
 
 def event_items(events):
+    if not events:
+        return f'      <li class="events__leer">{esc(daten.t("keine_termine"))}</li>\n'
     return "".join(f"""      <li>
         <span class="event__date"><b>{e["von"].day:02}</b><span>{MON[e["von"].month - 1]}</span></span>
-        <span><span class="event__title">{esc(e["titel"]["de"])}</span><br><span class="event__meta">{esc(e["meta"]["de"])}</span></span>
+        <span><span class="event__title">{esc(e["titel"])}</span><br><span class="event__meta">{esc(e["meta"])}</span></span>
         <span class="event__tag">{e["typ"]}</span>
       </li>
 """ for e in events)
@@ -388,12 +394,12 @@ def highlight_cards(items):
     out = ""
     for h in items:
         tag = (f'        <span class="event__tag" style="border-color:var(--geo-navy-2);color:var(--geo-navy-2);'
-               f'margin-bottom:.6rem;display:inline-block">Partner · {esc(h["partner"])}</span>\n') if h["partner"] else ""
-        ort = f'        <p>{esc(h["ort"]["de"])}</p>\n' if h["mehrfach"] and h["ort"]["de"] else ""
-        text = f'        <p>{esc(h["text"]["de"])}</p>\n' if h["text"]["de"] else ""
-        out += (f'      <div class="card">\n{tag}        <h3>{esc(h["titel"]["de"])}</h3>\n{ort}'
-                f'        <p>{esc(h["wann"]["de"])}</p>\n{text}      </div>\n')
-    return out
+               f'margin-bottom:.6rem;display:inline-block">{daten.t("partner")} · {esc(h["partner"])}</span>\n') if h["partner"] else ""
+        ort = f'        <p>{esc(h["ort"])}</p>\n' if h["mehrfach"] and h["ort"] else ""
+        text = f'        <p>{esc(h["text"])}</p>\n' if h["text"] else ""
+        out += (f'      <div class="card">\n{tag}        <h3>{esc(h["titel"])}</h3>\n{ort}'
+                f'        <p>{esc(h["wann"])}</p>\n{text}      </div>\n')
+    return out or f'      <p class="grid__leer">{esc(daten.t("keine_highlights"))}</p>\n'
 
 
 va_body = hero(

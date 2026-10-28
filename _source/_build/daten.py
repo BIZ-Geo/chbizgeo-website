@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
-"""Liest die gepflegten Inhalte aus _source/daten/*.csv.
+"""Liest die gepflegten Inhalte einer Sprachregion aus _source/daten/<region>/*.csv.
 
-Die CSV-Dateien sind die Quelle für Module (Beschreibungen, Preise, Lektionen),
-Fachgebiete, Kursangebot und Veranstaltungskalender. Format (Excel-tauglich):
-Semikolon als Trenner, UTF-8, Listen innerhalb einer Zelle mit « | » getrennt,
-Ja/Nein-Spalten mit „ja“ oder leer, Datum als TT.MM.JJJJ.
+Je Region (de = Deutschschweiz, fr = Romandie, it = Ticino) gibt es einen Ordner mit
+module.csv, fachgebiete.csv, kursangebot.csv und veranstaltungen.csv – jeweils nur in
+der Sprache der Region. Format (Excel-tauglich): Semikolon als Trenner, UTF-8, Listen
+innerhalb einer Zelle mit « | » getrennt, Ja/Nein-Spalten mit „ja“ oder leer, Datum
+als TT.MM.JJJJ.
 
-Die Build-Skripte erzeugen daraus die deutschen Seiten. FR/IT kommen aus den
-Sprachspalten derselben Zeile: csv_triples() liefert dafür (DE, FR, IT)-Einträge
-für die Übersetzungstabelle – fehlt eine Übersetzung, bleibt der deutsche Text
-stehen und der Build meldet die Lücke.
+Welche Region gebaut wird, bestimmt die Umgebungsvariable BIZGEO_REGION (gesetzt von
+build_regions.py, Standard „de“). Die Build-Skripte setzen die Texte der Region direkt
+ein; die festen Seitentexte übersetzt build_regions.py anschliessend über
+translate_data.py.
 """
-import csv, datetime, html, pathlib, re
+import csv, datetime, html, os, pathlib, re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-DATEN = ROOT / "daten"
-SPRACHEN = ("de", "fr", "it")
+REGION = os.environ.get("BIZGEO_REGION", "de")
+DATEN = ROOT / "daten" / REGION
 
 MONATE = {
     "de": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August",
@@ -31,12 +32,51 @@ MONATE_KURZ = {
            "nov.", "déc."],
     "it": ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"],
 }
-# Ortsnamen, die in FR/IT anders heissen (Rest bleibt als Eigenname stehen)
-ORTE = {"Zürich": ("Zurich", "Zurigo"), "Bern": ("Berne", "Berna"), "Zug": ("Zoug", "Zugo"),
-        "Basel": ("Bâle", "Basilea"), "Luzern": ("Lucerne", "Lucerna")}
-TYPEN = ("Unterricht", "Kurs", "Prüfung", "Anlass", "Frist", "Highlight")
 
-_luecken = []          # fehlende FR/IT-Übersetzungen, vom Build gemeldet
+# Kurze Textbausteine, die die Build-Skripte mit den CSV-Inhalten kombinieren
+TEXT = {
+    "modul": {"de": "Modul", "fr": "Module", "it": "Modulo"},
+    "eyecatcher": {"de": "Eyecatcher", "fr": "Visuel", "it": "Immagine guida"},
+    "eyecatcher_modul": {"de": "Eyecatcher Modul", "fr": "Visuel module", "it": "Immagine guida modulo"},
+    "lektionen": {"de": "Lektionen", "fr": "leçons", "it": "lezioni"},
+    "kurs": {"de": "Kurs", "fr": "Cours", "it": "Corso"},
+    "einzelkurs": {"de": "Einzelkurs", "fr": "Cours individuel", "it": "Corso singolo"},
+    "partner": {"de": "Partner", "fr": "Partenaire", "it": "Partner"},
+    "naechste": {"de": "Nächste Termine:", "fr": "Prochaines dates :", "it": "Prossime date:"},
+    "und": {"de": "und", "fr": "et", "it": "e"},
+    "ganztaegig": {"de": "Ganztägig", "fr": "Toute la journée", "it": "Intera giornata"},
+    "keine_termine": {"de": "Aktuell sind keine Termine eingetragen.",
+                      "fr": "Aucune date n'est inscrite pour le moment.",
+                      "it": "Al momento non ci sono date in programma."},
+    "keine_highlights": {"de": "Aktuell sind keine Highlights geplant.",
+                         "fr": "Aucun temps fort n'est prévu pour le moment.",
+                         "it": "Al momento non sono previsti highlight."},
+    "keine_kurse": {"de": "Aktuell sind keine Kurse ausgeschrieben.",
+                    "fr": "Aucun cours n'est programmé pour le moment.",
+                    "it": "Al momento non ci sono corsi in programma."},
+    "basismodul_im": {"de": "Basismodul im Lehrgang Geomatiktechnik bei BIZ Geo.",
+                      "fr": "module de base du cursus en technique de la géomatique chez BIZ Geo.",
+                      "it": "modulo di base del ciclo di formazione in tecnica della geomatica presso BIZ Geo."},
+    "wahlmodul_im": {"de": "Wahlmodul im Lehrgang Geomatiktechnik bei BIZ Geo.",
+                     "fr": "module à option du cursus en technique de la géomatique chez BIZ Geo.",
+                     "it": "modulo a scelta del ciclo di formazione in tecnica della geomatica presso BIZ Geo."},
+}
+
+# Typ-Spalte: die Begriffe dürfen in der Sprache der Region stehen; intern gilt der deutsche Name
+# (das Etikett auf der Website übersetzt translate_data.py)
+TYPEN = {
+    "Unterricht": ("unterricht", "enseignement", "lezione", "lezioni"),
+    "Kurs": ("kurs", "cours", "corso"),
+    "Prüfung": ("prüfung", "pruefung", "examen", "esame"),
+    "Anlass": ("anlass", "événement", "evenement", "evento"),
+    "Frist": ("frist", "délai", "delai", "scadenza"),
+    "Highlight": ("highlight", "temps fort"),
+}
+
+
+def t(schluessel):
+    """Textbaustein in der Sprache der Region."""
+    return TEXT[schluessel][REGION]
 
 
 def esc(s):
@@ -44,15 +84,18 @@ def esc(s):
 
 
 def lesen(name):
-    """Liest eine CSV-Datei als Liste von dicts (leere Zeilen werden übersprungen)."""
+    """Liest eine CSV-Datei der Region als Liste von dicts (leere Zeilen werden übersprungen)."""
     pfad = DATEN / name
+    if not pfad.exists():
+        raise SystemExit(f"Datei fehlt: daten/{REGION}/{name}")
     text = pfad.read_text(encoding="utf-8-sig")
-    trenner = ";" if text.split("\n", 1)[0].count(";") >= text.split("\n", 1)[0].count(",") else ","
+    kopf = text.split("\n", 1)[0]
+    trenner = ";" if kopf.count(";") >= kopf.count(",") else ","
     zeilen = []
     for nr, z in enumerate(csv.DictReader(text.splitlines(), delimiter=trenner), start=2):
         z = {k.strip(): (v or "").strip() for k, v in z.items() if k}
         if any(z.values()):
-            z["_zeile"] = f"{name}:{nr}"
+            z["_zeile"] = f"daten/{REGION}/{name}:{nr}"
             zeilen.append(z)
     return zeilen
 
@@ -77,65 +120,37 @@ def datum(wert, wo):
     raise SystemExit(f"Ungültiges Datum «{wert}» in {wo} – erwartet TT.MM.JJJJ")
 
 
-def sprachen(z, feld, wo, ist_liste=False):
-    """{de, fr, it} eines Feldes; fehlende Übersetzungen fallen auf DE zurück."""
-    de = z.get(f"{feld}_de", "")
-    out = {"de": liste(de) if ist_liste else de}
-    for lang in ("fr", "it"):
-        v = z.get(f"{feld}_{lang}", "")
-        if ist_liste:
-            v = liste(v)
-            if len(v) != len(out["de"]):
-                if out["de"]:
-                    _luecken.append(f"{wo}: {feld}_{lang} hat {len(v)} statt {len(out['de'])} Einträge")
-                v = out["de"]
-        elif de and not v:
-            _luecken.append(f"{wo}: {feld}_{lang} fehlt")
-            v = de
-        out[lang] = v
-    return out
-
-
 # ------------------------------------------------------------------ Formatierung
 def chf(betrag):
     n = int(re.sub(r"[^\d]", "", betrag) or 0)
     return "CHF " + f"{n:,}".replace(",", "'")
 
 
-def zeit_text(zeit, lang):
+def zeit_text(zeit):
     if not zeit:
         return ""
-    if zeit.lower() in ("ganztägig", "ganztags"):
-        return {"de": "Ganztägig", "fr": "Toute la journée", "it": "Intera giornata"}[lang]
+    if zeit.lower() in ("ganztägig", "ganztags", "toute la journée", "intera giornata"):
+        return t("ganztaegig")
     zeit = re.sub(r"\s*[–-]\s*", " – ", zeit)
-    if lang == "de":
+    if REGION == "de":
         return zeit + " Uhr"
-    if lang == "fr":
+    if REGION == "fr":
         return re.sub(r"(\d{1,2}):(\d{2})", r"\1h\2", zeit)
     return zeit
 
 
-def ort_text(ort, lang):
-    if lang == "de":
-        return ort
-    i = 0 if lang == "fr" else 1
-    for de, uebers in ORTE.items():
-        ort = re.sub(rf"\b{de}\b", uebers[i], ort)
-    return ort
-
-
-def spanne_kurz(von, bis, lang):
+def spanne_kurz(von, bis):
     """28.–30.10.2026 bzw. 28.10.–2.11.2026 (FR/IT ohne Punkt nach dem Tag)."""
-    p = "." if lang == "de" else ""
+    p = "." if REGION == "de" else ""
     if bis.month == von.month and bis.year == von.year:
         return f"{von.day}{p}–{bis.day}.{bis.month:02}.{bis.year}"
     return f"{von.day}.{von.month:02}{p}–{bis.day}.{bis.month:02}.{bis.year}"
 
 
-def datum_lang(von, bis, lang):
+def datum_lang(von, bis):
     """27. November 2026 / 28.–30. Oktober 2026 (DE) bzw. 27 novembre 2026 (FR/IT)."""
-    p = "." if lang == "de" else ""
-    m = MONATE[lang]
+    p = "." if REGION == "de" else ""
+    m = MONATE[REGION]
     if not bis or bis == von:
         return f"{von.day}{p} {m[von.month - 1]} {von.year}"
     if bis.month == von.month:
@@ -143,51 +158,55 @@ def datum_lang(von, bis, lang):
     return f"{von.day}{p} {m[von.month - 1]} – {bis.day}{p} {m[bis.month - 1]} {bis.year}"
 
 
-def termine_liste(daten, lang):
+def termine_liste(daten):
     """22.10., 28.10. und 3.12.2026"""
-    p = "." if lang == "de" else ""
-    und = {"de": "und", "fr": "et", "it": "e"}[lang]
+    p = "." if REGION == "de" else ""
     teile = [f"{d.day}.{d.month}{p}" for d in daten[:-1]]
     letzt = f"{daten[-1].day}.{daten[-1].month}.{daten[-1].year}"
-    return letzt if not teile else ", ".join(teile) + f" {und} " + letzt
+    return letzt if not teile else ", ".join(teile) + f" {t('und')} " + letzt
 
 
 # ------------------------------------------------------------------ Datensätze
 def module():
-    """Module in Dateireihenfolge, als dict im Format von build_modules.MODULES."""
+    """Module in Dateireihenfolge: {key: {code, kind, title, lead, outcomes, …}}."""
     out = {}
     for z in lesen("module.csv"):
-        wo = z["_zeile"]
         code = z["code"].upper()
         art = z["art"].lower()
-        kind = "basis" if art.startswith("basis") else "wahl"
-        m = {
+        kind = "basis" if ("basis" in art or "base" in art) else "wahl"
+        out[code.lower()] = {
             "code": code, "kind": kind,
-            "titel": sprachen(z, "titel", wo),
-            "lead": sprachen(z, "kurzbeschreibung", wo),
-            "outcomes": sprachen(z, "kompetenzen", wo, ist_liste=True),
-            "voraussetzungen": sprachen(z, "voraussetzungen", wo, ist_liste=True),
-            "kurse": sprachen(z, "kurse", wo, ist_liste=True),
-            "lektionen": f"{z['lektionen']} Lektionen" if z.get("lektionen") else "",
+            "title": z["titel"],
+            "lead": z.get("kurzbeschreibung", ""),
+            "outcomes": liste(z.get("kompetenzen", "")),
+            "voraussetzungen": liste(z.get("voraussetzungen", "")),
+            "kurse": liste(z.get("kurse", "")),
+            "lektionen": f"{z['lektionen']} {t('lektionen')}" if z.get("lektionen") else "",
             "kosten": chf(z["kosten_chf"]) if z.get("kosten_chf") else "",
         }
-        m["title"] = m["titel"]["de"]
-        out[code.lower()] = m
     return out
 
 
 def fachgebiete():
     kurse = {}
     for z in lesen("kursangebot.csv"):
-        kurse.setdefault(z["fachgebiet"], []).append(sprachen(z, "kurs", z["_zeile"]))
+        kurse.setdefault(z["fachgebiet"], []).append(z["kurs"])
     out = []
     for z in lesen("fachgebiete.csv"):
-        wo = z["_zeile"]
-        out.append({"id": z["id"], "titel": sprachen(z, "titel", wo),
-                    "beschreibung": sprachen(z, "beschreibung", wo), "kurse": kurse.pop(z["id"], [])})
+        out.append({"id": z["id"], "titel": z["titel"], "beschreibung": z["beschreibung"],
+                    "kurse": kurse.pop(z["id"], [])})
     for rest in kurse:
-        raise SystemExit(f"kursangebot.csv: Fachgebiet «{rest}» fehlt in fachgebiete.csv")
+        raise SystemExit(f"daten/{REGION}/kursangebot.csv: Fachgebiet «{rest}» fehlt in fachgebiete.csv")
     return out
+
+
+def typ_normal(wert, wo):
+    w = (wert or "Anlass").strip().lower()
+    for name, varianten in TYPEN.items():
+        if w in varianten:
+            return name
+    raise SystemExit(f"{wo}: Typ «{wert}» unbekannt – erlaubt: " +
+                     ", ".join(v for vs in TYPEN.values() for v in vs))
 
 
 def veranstaltungen(ab=None):
@@ -199,22 +218,19 @@ def veranstaltungen(ab=None):
         von, bis = datum(z["datum"], wo), datum(z.get("bis", ""), wo)
         if (bis or von) < ab:
             continue
-        typ = z.get("typ", "") or "Anlass"
-        if typ not in TYPEN:
-            raise SystemExit(f"{wo}: Typ «{typ}» unbekannt – erlaubt: {', '.join(TYPEN)}")
-        e = {"von": von, "bis": bis if bis and bis != von else None, "typ": typ,
-             "klasse": z.get("klasse", ""), "modul": z.get("modul", "").upper(),
-             "partner": z.get("partner", ""),
-             "startseite": ja(z.get("startseite", "")), "highlight": ja(z.get("highlight", "")),
-             "titel": sprachen(z, "titel", wo), "text": sprachen(z, "text", wo)}
-        e["meta"] = {}
-        e["ort"] = {lang: ort_text(z.get("ort", ""), lang) for lang in SPRACHEN}
-        for lang in SPRACHEN:
-            vorne = spanne_kurz(von, e["bis"], lang) if e["bis"] else zeit_text(z.get("zeit", ""), lang)
-            e["meta"][lang] = " · ".join(x for x in (vorne, e["ort"][lang]) if x)
-        e["datum_lang"] = {lang: datum_lang(von, e["bis"], lang) for lang in SPRACHEN}
-        out.append(e)
-    return sorted(out, key=lambda e: (e["von"], e["titel"]["de"]))
+        bis = bis if bis and bis != von else None
+        ort = z.get("ort", "")
+        vorne = spanne_kurz(von, bis) if bis else zeit_text(z.get("zeit", ""))
+        out.append({
+            "von": von, "bis": bis, "typ": typ_normal(z.get("typ", ""), wo),
+            "klasse": z.get("klasse", ""), "modul": z.get("modul", "").upper(),
+            "partner": z.get("partner", ""), "ort": ort,
+            "startseite": ja(z.get("startseite", "")), "highlight": ja(z.get("highlight", "")),
+            "titel": z["titel"], "text": z.get("text", ""),
+            "meta": " · ".join(x for x in (vorne, ort) if x),
+            "datum_lang": datum_lang(von, bis),
+        })
+    return sorted(out, key=lambda e: (e["von"], e["titel"]))
 
 
 def highlights(events):
@@ -222,70 +238,20 @@ def highlights(events):
     gruppen = {}
     for e in events:
         if e["highlight"]:
-            gruppen.setdefault(e["titel"]["de"], []).append(e)
+            gruppen.setdefault(e["titel"], []).append(e)
     out = []
     for gruppe in gruppen.values():
         e = gruppe[0]
         if len(gruppe) == 1:
-            wann = {l: " · ".join(x for x in (e["datum_lang"][l], e["ort"][l]) if x) for l in SPRACHEN}
+            wann = " · ".join(x for x in (e["datum_lang"], e["ort"]) if x)
         else:
-            vor = {"de": "Nächste Termine:", "fr": "Prochaines dates :", "it": "Prossime date:"}
-            wann = {l: f"{vor[l]} {termine_liste([g['von'] for g in gruppe], l)}" for l in SPRACHEN}
-        out.append({**e, "wann": wann, "mehrfach": len(gruppe) > 1})
+            wann = f"{t('naechste')} {termine_liste([g['von'] for g in gruppe])}"
+        out.append({**e, "wann": wann, "mehrfach": len(gruppe) > 1,
+                    "startseite": any(g["startseite"] for g in gruppe)})
     return out
 
 
-# ------------------------------------------------------------------ Übersetzung
-def _tripel(de, fr, it):
-    return (esc(de), esc(fr), esc(it))
-
-
-def csv_triples():
-    """(DE, FR, IT) für alle Texte, die die Build-Skripte aus den CSV-Dateien erzeugen."""
-    t = []
-    for m in module().values():
-        c, ti = m["code"], m["titel"]
-        t.append(_tripel(ti["de"], ti["fr"], ti["it"]))
-        t.append(_tripel(f"Modul {c} – {ti['de']}", f"Module {c} – {ti['fr']}", f"Modulo {c} – {ti['it']}"))
-        t.append(_tripel(f"Modul {c} – {ti['de']} – BIZ Geo", f"Module {c} – {ti['fr']} – BIZ Geo",
-                         f"Modulo {c} – {ti['it']} – BIZ Geo"))
-        t.append(_tripel(f"Eyecatcher Modul {c} – {ti['de']}", f"Visuel module {c} – {ti['fr']}",
-                         f"Immagine guida modulo {c} – {ti['it']}"))
-        if m["kind"] == "basis":
-            art = ("Basismodul", "module de base", "modulo di base")
-        else:
-            art = ("Wahlmodul", "module à option", "modulo a scelta")
-        t.append(_tripel(f"Modul {c} {ti['de']} – {art[0]} im Lehrgang Geomatiktechnik bei BIZ Geo.",
-                         f"Module {c} {ti['fr']} – {art[1]} du cursus en technique de la géomatique chez BIZ Geo.",
-                         f"Modulo {c} {ti['it']} – {art[2]} del ciclo di formazione in tecnica della geomatica presso BIZ Geo."))
-        t.append(_tripel(m["lead"]["de"], m["lead"]["fr"], m["lead"]["it"]))
-        for feld in ("outcomes", "voraussetzungen", "kurse"):
-            t += [_tripel(*x) for x in zip(m[feld]["de"], m[feld]["fr"], m[feld]["it"])]
-        if m["lektionen"]:
-            n = m["lektionen"].split()[0]
-            t.append((f"{n} Lektionen", f"{n} leçons", f"{n} lezioni"))
-    for f in fachgebiete():
-        t.append(_tripel(f["titel"]["de"], f["titel"]["fr"], f["titel"]["it"]))
-        t.append(_tripel(f["beschreibung"]["de"], f["beschreibung"]["fr"], f["beschreibung"]["it"]))
-        t += [_tripel(k["de"], k["fr"], k["it"]) for k in f["kurse"]]
-    events = veranstaltungen()
-    t += list(zip(MONATE_KURZ["de"], MONATE_KURZ["fr"], MONATE_KURZ["it"]))
-    for e in events:
-        for feld in ("titel", "text", "meta", "datum_lang"):
-            t.append(_tripel(e[feld]["de"], e[feld]["fr"], e[feld]["it"]))
-        t.append(_tripel(*(" · ".join(x for x in (e["datum_lang"][l], e["ort"][l]) if x) for l in SPRACHEN)))
-        if e["klasse"]:
-            t.append(_tripel(f"Kurs {e['klasse']}", f"Cours {e['klasse']}", f"Corso {e['klasse']}"))
-        modul = e["modul"] or "S2"
-        t.append(_tripel(f"Eyecatcher {modul} – {e['titel']['de']}", f"Visuel {modul} – {e['titel']['fr']}",
-                         f"Immagine guida {modul} – {e['titel']['it']}"))
-    for h in highlights(events):
-        t.append(_tripel(h["wann"]["de"], h["wann"]["fr"], h["wann"]["it"]))
-        if h["partner"]:
-            t.append(_tripel(f"Partner · {h['partner']}", f"Partenaire · {h['partner']}",
-                             f"Partner · {h['partner']}"))
-    return [x for x in t if x[0] and (x[1] != x[0] or x[2] != x[0])]
-
-
-def luecken():
-    return sorted(set(_luecken))
+def zusammenfassung():
+    """Kurzer Überblick für die Build-Ausgabe."""
+    return (f"{len(module())} Module, {sum(len(f['kurse']) for f in fachgebiete())} Kurse, "
+            f"{len(veranstaltungen())} kommende Termine")
